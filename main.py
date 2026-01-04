@@ -4,7 +4,7 @@ from google import genai
 from datetime import datetime
 
 # ==========================================
-# 🌟 ID固定設定
+# 🌟 あなたの専用ID設定済み
 # ==========================================
 AMAZON_ID = "191383501790a-22"
 RAKUTEN_ID = "4fb92fbd.48f820ce.4fb92fbe.82189b12"
@@ -14,10 +14,11 @@ SITE_NAME = "ホロ活ナビ"
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-def fetch_videos(org, limit=100):
-    """特定の組織から再生数順に動画を取得する（API上限50のため2回実行）"""
+def fetch_top_100(org):
+    """APIの制限(50件)を回避して100件取得する関数"""
     url = "https://holodex.net/api/v2/videos"
-    all_videos = []
+    combined = []
+    # 50件ずつ2回取得して100件にする
     for offset in [0, 50]:
         params = {
             "org": org,
@@ -31,25 +32,30 @@ def fetch_videos(org, limit=100):
             res = requests.get(url, params=params, headers={"X-APIKEY": HOLODEX_API_KEY})
             data = res.json()
             if isinstance(data, list):
-                all_videos.extend(data)
+                combined.extend(data)
         except:
             pass
-    return all_videos
+    return combined
 
 def main():
-    # 1. 各グループから100件ずつ取得
-    v_hololive = fetch_videos("Hololive")
-    v_holostars = fetch_videos("Holostars")
+    # 1. 各グループから100件ずつ取得（計200件）
+    raw_holo = fetch_top_100("Hololive")
+    raw_stars = fetch_top_100("Holostars")
+    
+    # ホロライブからスターズを完全に除外するフィルタリング
+    v_holo = [v for v in raw_holo if "stars" not in v.get('channel', {}).get('sub_org', '').lower()]
+    v_stars = raw_stars # スターズはそのまま使用
     
     client = genai.Client(api_key=GEMINI_API_KEY)
 
+    # HTML構築
     html_content = f"""
     <!DOCTYPE html>
     <html lang="ja">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{SITE_NAME} | 国内外トップ200 AI解析ポータル</title>
+        <title>{SITE_NAME} | 再生数TOP100・AI楽曲解析</title>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
         <style>
             :root {{ --main: #00c2ff; --sub: #ff66b2; --stars: #ffb800; --dark: #1a202c; --light: #f4f8fb; --music: #7e57c2; }}
@@ -60,11 +66,11 @@ def main():
                 color: white; padding: 100px 20px; text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.2); 
             }}
             header h1 {{ margin: 0; font-size: 4rem; font-weight: 900; letter-spacing: -2px; text-shadow: 0 4px 15px rgba(0,0,0,0.3); }}
-            .sub-title {{ font-weight: bold; font-size: 1.1rem; opacity: 0.9; margin-top: 15px; }}
+            .sub-title {{ font-weight: bold; font-size: 1.1rem; opacity: 0.95; margin-top: 15px; }}
             
             .container {{ max-width: 1400px; margin: 0 auto; padding: 20px; }}
 
-            /* 巨大なタブボタン */
+            /* 巨大なナビゲーション */
             .nav-box {{ 
                 background: white; padding: 25px; border-radius: 40px; margin: -50px auto 40px; 
                 text-align: center; box-shadow: 0 15px 45px rgba(0,0,0,0.1); position: relative; z-index: 100; max-width: 900px; 
@@ -85,18 +91,18 @@ def main():
             .card:hover {{ transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); }}
             .thumb-container {{ position: relative; aspect-ratio: 16/9; background: #000; }}
             .thumb {{ width: 100%; height: 100%; object-fit: cover; }}
-            .view-badge {{ position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; }}
+            .view-badge {{ position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.85); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; }}
 
             .info {{ padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }}
-            .ch-name {{ font-size: 0.9rem; font-weight: 900; color: var(--main); margin-bottom: 8px; }}
+            .ch-name {{ font-size: 0.9rem; font-weight: 900; color: var(--main); margin-bottom: 10px; }}
             .video-title {{ font-weight: bold; font-size: 1.05rem; line-height: 1.5; margin-bottom: 15px; height: 3em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }}
             
             /* 🎵 楽曲情報ボックス */
             .music-box {{ background: #f3e5f5; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 6px solid var(--music); }}
-            .music-label {{ font-size: 0.7rem; color: var(--music); font-weight: 900; display: block; margin-bottom: 5px; }}
+            .music-label {{ font-size: 0.65rem; color: var(--music); font-weight: 900; display: block; margin-bottom: 4px; }}
             .music-text {{ font-size: 0.9rem; font-weight: 900; color: #4a148c; }}
             
-            .ai-comment {{ font-size: 0.85rem; color: #4a5568; background: #f8fafc; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #edf2f7; line-height: 1.4; }}
+            .ai-comment {{ font-size: 0.85rem; color: #4a5568; background: #f8fafc; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #edf2f7; line-height: 1.4; font-style: italic; }}
 
             .links {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }}
             .btn-link {{ text-decoration: none; padding: 12px; border-radius: 15px; font-size: 0.8rem; font-weight: 900; text-align: center; transition: 0.2s; }}
@@ -110,13 +116,14 @@ def main():
                 document.querySelectorAll('.btn-nav').forEach(el => el.classList.remove('active'));
                 document.getElementById(groupId).classList.add('active');
                 document.getElementById('btn-' + groupId).classList.add('active');
+                window.scrollTo({{ top: 400, behavior: 'smooth' }});
             }}
         </script>
     </head>
     <body onload="showTab('holo')">
         <header>
             <h1>🌟 {SITE_NAME}</h1>
-            <p class="sub-title">AI楽曲解析 × 再生数上位各100選ポータル</p>
+            <p class="sub-title">AIがナビゲートする再生数TOP100ポータル</p>
             <div style="font-size:0.85rem; margin-top:20px; opacity:0.8;">最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}</div>
         </header>
 
@@ -132,7 +139,6 @@ def main():
     # --- カード生成関数 ---
     def create_card(v, org_name):
         try:
-            # データ異常ガード
             if not isinstance(v.get('channel'), dict): return ""
             ch_name = v['channel']['name']
             v_id = v['id']
@@ -140,21 +146,21 @@ def main():
             views = v.get('view_count', 0)
         except: return ""
 
-        # AI楽曲解析
-        prompt = f"Extract song info? [Song - Artist] or [None]. Also write 15-char catchphrase. Format: Music|Summary. Title: {title}"
+        # AI解析：楽曲情報と紹介文
+        prompt = f"Extract song: [Song - Artist] or [None]. Also write 15-char summary. Format: Music|Summary. Title: {title}"
         try:
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             parts = res.text.strip().split('|')
             m_val = parts[0].strip()
-            ai_txt = parts[1].strip() if len(parts) > 1 else "注目の配信をチェック！"
+            ai_txt = parts[1].strip() if len(parts) > 1 else "人気動画をAIが分析中！"
         except:
-            m_val, ai_txt = "[None]", "ホロライブ最新情報を分析中"
+            m_val, ai_txt = "[None]", "ホロライブ最新情報をチェック！"
 
-        music_html = f'<div class="music-box"><span class="music-label">🎵 楽曲情報</span><div class="music-text">{m_val}</div></div>' if "[None]" not in m_val else ""
+        m_html = f'<div class="music-box"><span class="music-label">🎵 楽曲情報</span><div class="music-text">{m_val}</div></div>' if "[None]" not in m_val else ""
 
-        search = requests.utils.quote(f"{org_name} {ch_name}")
-        amz = f"https://www.amazon.co.jp/s?k={search}&tag={AMAZON_ID}"
-        rak = f"https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{search}%2F"
+        query = requests.utils.quote(f"{org_name} {ch_name}")
+        amz = f"https://www.amazon.co.jp/s?k={query}&tag={AMAZON_ID}"
+        rak = f"https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{query}%2F"
 
         return f"""
         <div class="card">
@@ -165,18 +171,18 @@ def main():
             <div class="info">
                 <div class="ch-name">👤 {ch_name}</div>
                 <div class="video-title">{title}</div>
-                {music_html}
+                {m_html}
                 <div class="ai-comment">🤖 {ai_txt}</div>
                 <div class="links">
-                    <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-link btn-yt">YouTubeで視聴する</a>
-                    <a href="{amz}" target="_blank" class="btn-link btn-amz">Amazon</a>
+                    <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-link btn-yt">YouTubeで視聴</a>
+                    <a href="{amz}" target="_blank" class="btn-link btn-amz">Amazonグッズ</a>
                     <a href="{rak}" target="_blank" class="btn-link btn-rak">楽天市場</a>
                 </div>
             </div>
         </div>"""
 
     # ホロライブ100件
-    for v in v_hololive:
+    for v in v_holo:
         html_content += create_card(v, "ホロライブ")
 
     html_content += """
@@ -184,13 +190,13 @@ def main():
     """
 
     # スターズ100件
-    for v in v_holostars:
+    for v in v_stars:
         html_content += create_card(v, "ホロスターズ")
 
     html_content += f"""
             </div> </div>
         <footer style="text-align: center; padding: 100px; color: #a0aec0; background: white; margin-top: 80px;">
-            © {datetime.now().year} {SITE_NAME} | AI-Powered Fan Project
+            © {datetime.now().year} {SITE_NAME} | AI Analysis Fan Project
         </footer>
     </body>
     </html>"""
