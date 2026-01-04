@@ -1,10 +1,13 @@
-name: Hololive Bot Update
+name: Hololive Bot Hourly Update
 
 on:
   schedule:
-    # 1時間に1回実行 (UTC 0分 = 日本時間 毎時0分)
+    # 1時間に1回実行 (日本時間 毎時0分ごろ)
     - cron: '0 * * * *'
-  workflow_dispatch: # 手動で実行したい時用
+  workflow_dispatch: # 手動ボタンでも実行可能にする
+
+permissions: # ここで書き込み権限を明示的に許可
+  contents: write
 
 jobs:
   build:
@@ -34,5 +37,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add index.html
-          git commit -m "Auto Update: $(date)" || exit 0
-          git push
+          # 変更がある場合のみコミットしてエラーを防ぐ
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto Update: $(date)" && git push)
