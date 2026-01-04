@@ -13,14 +13,13 @@
             .motto { font-size: 0.85rem; color: var(--sub); margin-top: 10px; font-weight: bold; }
             .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
             .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-            .tab-btn { padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; }
+            .tab-btn { padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
             .tab-btn.active { background: var(--holo); color: #fff; }
             .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
             .grid.active { display: grid; }
             .card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
             .thumb-box { position: relative; aspect-ratio: 16/9; background:#000; }
             .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
-            .org-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }
             .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
             .ch-name { font-size: 11px; color: var(--sub); margin-bottom: 8px; }
             .highlight { font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }
@@ -33,13 +32,13 @@
             .btn-sub { flex: 1; text-decoration: none; background: #f8fafc; color: var(--sub); text-align: center; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; border: 1px solid #e2e8f0; }
             .amz { border-bottom: 3px solid #ff9900; }
             .rak { border-bottom: 3px solid #bf0000; }
-            .error-msg { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--sub); font-weight: bold; }
+            .org-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 12px; border-radius: 8px; font-size: 10px; font-weight: bold; }
         </style>
         <script>
             function tab(id) {
-                document.querySelectorAll('.grid').forEach(g => g.classList.remove('active'));
+                document.querySelectorAll('.grid').forEach(g => g.style.display = 'none');
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
+                document.getElementById(id).style.display = 'grid';
                 document.getElementById('btn-' + id).classList.add('active');
             }
         </script>
@@ -47,7 +46,7 @@
     <body onload="tab('holo')">
         <header>
             <h1>💙 ホロライブ応援ナビ</h1>
-            <div class="motto">推しの素晴らしさを広め、みんなで活動を支援する</div>
+            <div class="motto">推しの素晴らしさを広め、活動をみんなで支援するファンポータル</div>
         </header>
         <div class="container">
             <div class="tabs">
@@ -57,7 +56,7 @@
             <div id="holo" class="grid active">
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -77,7 +76,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/qlyfeciKGFU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/qlyfeciKGFU/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -97,7 +96,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/bFRJQYIV15U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/bFRJQYIV15U/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -117,7 +116,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -137,7 +136,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -157,7 +156,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/09Vx41-0dvY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/09Vx41-0dvY/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -177,7 +176,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -197,7 +196,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -217,7 +216,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -237,7 +236,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/X4MIiDKm3vk/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/X4MIiDKm3vk/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -257,7 +256,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -277,7 +276,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -297,7 +296,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -317,7 +316,27 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/VafDiF5Kqt0/mqdefault.jpg" loading="lazy">
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</div>
+                <div class="highlight">✨ 見どころ満載の配信！</div>
+                <div class="v-title">【雑談/CHAT】お正月衣装をみせびらかす【#輪堂千速 / #hololivedev_is  #FLOWGLOW 】</div>
+                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=VafDiF5Kqt0" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ Chihaya  輪堂 千速さんの活動を支援 ／</div>
+                    <div class="merch-links">
+                        <a href="https://www.amazon.co.jp/s?k=Chihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -337,7 +356,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -357,7 +376,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -377,7 +396,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -397,7 +416,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -417,7 +436,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -437,7 +456,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -457,7 +476,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -477,7 +496,27 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/uA7cNVWU5bk/mqdefault.jpg" loading="lazy">
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Matsuri Channel 夏色まつり</div>
+                <div class="highlight">✨ 見どころ満載の配信！</div>
+                <div class="v-title">【新年】目標たてたり!【ホロライブ/夏色まつり】</div>
+                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ Matsuri  夏色まつりさんの活動を支援 ／</div>
+                    <div class="merch-links">
+                        <a href="https://www.amazon.co.jp/s?k=Matsuri%20%20%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMatsuri%20%20%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -497,7 +536,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -517,7 +556,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -537,67 +576,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 コンプサウルス</div>
-                <div class="highlight">✨ 見どころ満載の配信！</div>
-                <div class="v-title">【R.E.P.O.】救急隊でレベル10まで行くんだよオラッ✊【コンプサウルス┆ゆにれいど!】</div>
-                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ コンプサウルスさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 小廻こま / Komawari Koma</div>
-                <div class="highlight">✨ 見どころ満載の配信！</div>
-                <div class="v-title">【 R.E.P.O. 】あけましてれぽめとう!!【小廻こま/ミリプロ】</div>
-                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 小廻こま / Komawari Komaさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
-                <div class="highlight">✨ 見どころ満載の配信！</div>
-                <div class="v-title">REPO|新年リベンジ戦!皆でレベル10目指す! - 夜十神封魔 × 赤髪のとも × 鬱先生 × コンプサウルス × 星宮ちょこ × 小廻こま</div>
-                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Fuma  夜十神封魔さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Fuma%20%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FFuma%20%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -617,7 +596,67 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" loading="lazy">
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 コンプサウルス</div>
+                <div class="highlight">✨ 見どころ満載の配信！</div>
+                <div class="v-title">【R.E.P.O.】救急隊でレベル10まで行くんだよオラッ✊【コンプサウルス┆ゆにれいど!】</div>
+                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ コンプサウルスさんの活動を支援 ／</div>
+                    <div class="merch-links">
+                        <a href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy">
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
+                <div class="highlight">✨ 見どころ満載の配信！</div>
+                <div class="v-title">REPO|新年リベンジ戦!皆でレベル10目指す! - 夜十神封魔 × 赤髪のとも × 鬱先生 × コンプサウルス × 星宮ちょこ × 小廻こま</div>
+                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ Fuma  夜十神封魔さんの活動を支援 ／</div>
+                    <div class="merch-links">
+                        <a href="https://www.amazon.co.jp/s?k=Fuma%20%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FFuma%20%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" loading="lazy">
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 小廻こま / Komawari Koma</div>
+                <div class="highlight">✨ 見どころ満載の配信！</div>
+                <div class="v-title">【 R.E.P.O. 】あけましてれぽめとう!!【小廻こま/ミリプロ】</div>
+                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ 小廻こま / Komawari Komaさんの活動を支援 ／</div>
+                    <div class="merch-links">
+                        <a href="https://www.amazon.co.jp/s?k=%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -637,7 +676,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -657,7 +696,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/R_f50zRrZeY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/R_f50zRrZeY/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -677,7 +716,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/LwUHXBty9Uc/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/LwUHXBty9Uc/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -697,7 +736,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/v3z6g5jGefM/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/v3z6g5jGefM/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -717,7 +756,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/B-rGPWRNcj4/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/B-rGPWRNcj4/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -737,7 +776,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/ggHNJTHfsrw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/ggHNJTHfsrw/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -757,7 +796,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/HyH0-cJrpTQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/HyH0-cJrpTQ/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -777,7 +816,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/xUlOTXSVUOg/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/xUlOTXSVUOg/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -797,7 +836,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5E4lEdYHslI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/5E4lEdYHslI/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -817,7 +856,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/nausE6syqZw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/nausE6syqZw/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -837,7 +876,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/oRLA1BuoyIA/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/oRLA1BuoyIA/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -857,7 +896,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/mZRM6E9sp8o/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/mZRM6E9sp8o/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -877,7 +916,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/_x69CWR_UaE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/_x69CWR_UaE/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -897,7 +936,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/VXWLXwzMQzU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/VXWLXwzMQzU/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -917,7 +956,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5VpjayuOha0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/5VpjayuOha0/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -937,7 +976,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/AZVMXPG4MHE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/AZVMXPG4MHE/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -957,7 +996,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/q9L-yYHiBrc/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/q9L-yYHiBrc/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -977,7 +1016,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/HB-1-ivj5Pg/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/HB-1-ivj5Pg/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -997,7 +1036,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/AXvFN1eVhDw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/AXvFN1eVhDw/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1017,7 +1056,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2FrSgKkeMTk/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/2FrSgKkeMTk/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1037,7 +1076,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/zUpPHS4yIfs/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/zUpPHS4yIfs/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1057,7 +1096,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/WVnqfykvSxM/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/WVnqfykvSxM/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1077,7 +1116,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Fvt7e4LhFJE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/Fvt7e4LhFJE/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1097,7 +1136,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Et_c8txOW5Y/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/Et_c8txOW5Y/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1117,7 +1156,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/-uSlGzl93No/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/-uSlGzl93No/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1137,7 +1176,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/8BV_gRofckk/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/8BV_gRofckk/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1157,7 +1196,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Jq4iGpsN9Wo/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/Jq4iGpsN9Wo/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1177,7 +1216,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2T9v318FIxk/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/2T9v318FIxk/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1197,7 +1236,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/hOIzU_U6zf4/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/hOIzU_U6zf4/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1217,7 +1256,7 @@
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/ZV74kxCkOA0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
+                <img src="https://img.youtube.com/vi/ZV74kxCkOA0/mqdefault.jpg" loading="lazy">
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
@@ -1234,49 +1273,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/mxe-A8AlmxI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Chikara clip</div>
-                <div class="highlight">✨ 見どころ満載の配信！</div>
-                <div class="v-title">Cece and Shiori Have Had Enough of Gigi and Biboo's Kusogaki!!</div>
-                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=mxe-A8AlmxI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Chikara clipさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Chikara%20clip&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChikara%20clip%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/E2UxtZjGDdo/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 せん【ホロライブ切り抜き】</div>
-                <div class="highlight">✨ 見どころ満載の配信！</div>
-                <div class="v-title">【ホロライブ】のぞき見願望,狂気の才能などをテストするホロメン7人→マリン船長の段違いのサイコパス度が判明w「事件性を…」【切り抜き/宝鐘マリン/星街すいせい】</div>
-                <div class="ai-msg">💬 みんなで視聴して応援しよう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=E2UxtZjGDdo" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ せん【ホロライブ切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%9B%E3%82%93%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%9B%E3%82%93%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
         </div></div>
-            <div id="stars" class="grid"><p class='error-msg'>現在ライブ・新着データがありません。更新を待っています。</p></div>
+            <div id="stars" class="grid"><p class='error-msg'>データ更新中です。</p></div>
         </div>
-        <footer style="text-align: center; padding: 60px; font-size: 12px; color: #94a3b8;">© 2026 ホロライブ応援ナビ</footer>
+        <footer>© 2026 ホロライブ応援ナビ</footer>
     </body>
     </html>
