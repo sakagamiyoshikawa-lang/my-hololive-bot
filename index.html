@@ -2,72 +2,53 @@
     <!DOCTYPE html>
     <html lang="ja">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ホロライブ応援ナビ</title>
-        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ホロ応援ナビ</title>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
         <style>
-            :root { --main: #00c2ff; --bg: #f5f8fa; --card-bg: #ffffff; }
-            body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; color: #333; }
-            
-            header { background: linear-gradient(135deg, #00c2ff, #0078ff); color: #fff; padding: 60px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); }
-            h1 { margin: 0; font-size: 2.2rem; font-weight: 900; letter-spacing: 1px; }
-            header p { margin-top: 10px; font-weight: bold; opacity: 0.9; }
-            
-            .container { max-width: 1400px; margin: -20px auto 60px; padding: 0 20px; }
-            
-            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-
-            .card { background: var(--card-bg); border-radius: 28px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; }
-            .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
-            
-            .thumb { position: relative; aspect-ratio: 16/9; }
-            .thumb img { width: 100%; height: 100%; object-fit: cover; }
-            
-            .live-badge { position: absolute; top: 15px; right: 15px; background: #ff0000; color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: bold; animation: pulse 1.5s infinite; }
-            @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
-
-            .card-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
-            .liver-name { font-size: 11px; color: var(--main); font-weight: 900; margin-bottom: 8px; }
-            .catchphrase { font-size: 1.25rem; font-weight: 900; line-height: 1.3; margin-bottom: 12px; }
-            .desc { font-size: 14px; color: #4a5568; line-height: 1.6; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 15px; border-left: 5px solid var(--main); }
-            
-            .action-area { margin-top: auto; }
-            .main-btn { display: block; text-decoration: none; background: var(--main); color: #fff; text-align: center; padding: 15px; border-radius: 16px; font-weight: 900; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,194,255,0.2); }
-            .share-btn { display: block; text-decoration: none; background: #000; color: #fff; text-align: center; padding: 12px; border-radius: 16px; font-size: 12px; font-weight: bold; margin-bottom: 20px; }
-            
-            .support-label { font-size: 10px; color: #a0aec0; text-align: center; font-weight: bold; margin-bottom: 12px; }
-            .support-links { display: flex; gap: 8px; }
-            .s-link { flex: 1; text-decoration: none; font-size: 11px; font-weight: bold; text-align: center; padding: 10px 2px; border-radius: 10px; background: #f1f5f9; color: #4a5568; }
+            :root { --main: #00c2ff; --bg: #f0f4f8; --card: #fff; }
+            body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+            header { background: linear-gradient(135deg, #00c2ff, #0078ff); color: #fff; padding: 60px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+            h1 { margin: 0; font-size: 2.5rem; font-weight: 900; }
+            .container { max-width: 1400px; margin: -30px auto 0; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+            .card { background: var(--card); border-radius: 30px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: 0.3s; }
+            .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,194,255,0.15); }
+            .thumb-box { position: relative; aspect-ratio: 16/9; }
+            .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+            .badge { position: absolute; top: 15px; right: 15px; padding: 6px 15px; border-radius: 12px; font-size: 11px; font-weight: 900; color: #fff; }
+            .badge.live { background: #ff0000; animation: pulse 1s infinite; }
+            .badge.upcoming { background: #ffb800; }
+            @keyframes pulse { 0%, 100% {opacity: 1;} 50% {opacity: 0.7;} }
+            .card-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+            .ch-name { font-size: 11px; color: var(--main); font-weight: 900; margin: 0 0 10px; }
+            .highlight-txt { font-size: 1.4rem; font-weight: 900; margin: 0 0 12px; line-height: 1.2; }
+            .quote-box { background: #f8fafc; padding: 15px; border-radius: 18px; font-size: 14px; border-left: 5px solid var(--main); margin-bottom: 20px; }
+            .btn { display: block; text-decoration: none; text-align: center; padding: 14px; border-radius: 18px; font-weight: 900; font-size: 14px; margin-bottom: 10px; transition: 0.2s; }
+            .btn.watch { background: var(--main); color: #fff; }
+            .btn.reserve { background: #ffb800; color: #fff; }
+            .btn.share { background: #000; color: #fff; }
+            .support-grid { display: flex; gap: 8px; margin-top: 10px; }
+            .s-link { flex: 1; text-decoration: none; font-size: 10px; font-weight: 900; text-align: center; padding: 10px 2px; border-radius: 10px; background: #f1f5f9; color: #475569; }
             .s-link.amz { border-bottom: 3px solid #ff9900; }
             .s-link.rak { border-bottom: 3px solid #bf0000; }
-            .s-link.join { border-bottom: 3px solid #00c2ff; }
-
-            footer { text-align: center; padding: 80px 20px; color: #a0aec0; font-size: 12px; }
-            .empty-msg { text-align: center; padding: 100px; color: #a0aec0; font-weight: bold; }
         </style>
     </head>
     <body>
-        <header>
-            <h1>💙 ホロライブ応援ナビ</h1>
-            <p>ホロライブの魅力をAIで精査。布教と支援のためのファンポータル</p>
-        </header>
+        <header><h1>💙 ホロ応援ナビ</h1><p>推しの活動をAIで見守り、全力で布教・支援する</p></header>
         <div class="container">
-            <div class="grid">
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Okayu Ch. 猫又おかゆ</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Okayu Ch. 猫又おかゆ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCvaTdHTWBGv3MKj3KVqJVCw/join" target="_blank" class="s-link join">メン限</a>
@@ -76,19 +57,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Kureiji Ollie Ch. hololive-ID</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kureiji%20Ollie&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Kureiji Ollie Ch. hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kureiji%20Ollie&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Kureiji%20Ollie&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKureiji%20Ollie%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCYz_5n-uDuChHtLo7My1HnQ/join" target="_blank" class="s-link join">メン限</a>
@@ -97,19 +77,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Polka Ch. 尾丸ポルカ</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Polka Ch. 尾丸ポルカ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCK9V2B22uJYu3N7eR_BT9QA/join" target="_blank" class="s-link join">メン限</a>
@@ -118,19 +97,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Miko Ch. さくらみこ</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Miko Ch. さくらみこ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC-hM6YJuNYVAmUWxeIr9FeA/join" target="_blank" class="s-link join">メン限</a>
@@ -139,19 +117,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Flare Ch. 不知火フレア</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Flare Ch. 不知火フレア</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCvInZx9h3jC2JzsIzoOebWg/join" target="_blank" class="s-link join">メン限</a>
@@ -160,19 +137,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Su Ch. 水宮枢 - FLOW GLOW</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E6%B0%B4%E5%AE%AE%E6%9E%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Su Ch. 水宮枢 - FLOW GLOW</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E6%B0%B4%E5%AE%AE%E6%9E%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E6%B0%B4%E5%AE%AE%E6%9E%A2&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E6%B0%B4%E5%AE%AE%E6%9E%A2%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCjk2nKmHzgH5Xy-C5qYRd5A/join" target="_blank" class="s-link join">メン限</a>
@@ -181,19 +157,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Riona Ch. 響咲リオナ - FLOW GLOW</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=krYPklnl0CI" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Riona Ch. 響咲リオナ - FLOW GLOW</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=krYPklnl0CI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC9LSiN9hXI55svYEBrrK-tw/join" target="_blank" class="s-link join">メン限</a>
@@ -202,40 +177,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/VafDiF5Kqt0/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=VafDiF5Kqt0" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F%2F" target="_blank" class="s-link rak">楽天市場</a>
-                        <a href="https://www.youtube.com/channel/UCKMWFR6lAstLa7Vbf5dH7ig/join" target="_blank" class="s-link join">メン限</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
-            </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Takanashi Kiara Ch. hololive-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Takanashi%20Kiara&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Takanashi Kiara Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Takanashi%20Kiara&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Takanashi%20Kiara&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTakanashi%20Kiara%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCHsx4Hqa-1ORjQTh9TYDhww/join" target="_blank" class="s-link join">メン限</a>
@@ -244,19 +197,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/8jrxoUMXjmw/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/8jrxoUMXjmw/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Roboco Ch. - ロボ子</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=8jrxoUMXjmw" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Roboco&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Roboco Ch. - ロボ子</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=8jrxoUMXjmw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Roboco&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCDqI2jOz0weumE8s7paEk6g/join" target="_blank" class="s-link join">メン限</a>
@@ -265,19 +217,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/HqAQNm7nWEs/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                <div class="live-badge">LIVE</div>
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/HqAQNm7nWEs/mqdefault.jpg" loading="lazy">
+                <div class="badge live">LIVE中</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Iroha ch. 風真いろは - holoX -</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=HqAQNm7nWEs" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Iroha ch. 風真いろは - holoX -</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=HqAQNm7nWEs" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC_vMYWcDjmfdpH6r4TTn1MQ/join" target="_blank" class="s-link join">メン限</a>
@@ -286,19 +237,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Elizabeth Rose Bloodflame Ch. hololive-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Elizabeth%20Rose%20Bloodflame&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Elizabeth Rose Bloodflame Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Elizabeth%20Rose%20Bloodflame&dates=20260104T190000Z/20260104T200000Z&details=URL: https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Elizabeth%20Rose%20Bloodflame&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Elizabeth%20Rose%20Bloodflame&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FElizabeth%20Rose%20Bloodflame%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCW5uhrG1eCBYditmhL0Ykjw/join" target="_blank" class="s-link join">メン限</a>
@@ -307,19 +257,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/R1enqNSuqAc/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/R1enqNSuqAc/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Mio Channel 大神ミオ</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=R1enqNSuqAc" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Mio Channel 大神ミオ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&dates=20260104T223000Z/20260104T233000Z&details=URL: https://www.youtube.com/watch?v=R1enqNSuqAc" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=R1enqNSuqAc" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCp-5t9SrOQwXMU7iIjQfARg/join" target="_blank" class="s-link join">メン限</a>
@@ -328,19 +277,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Machina X Flayon Ch. HOLOSTARS-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Machina%20X%20Flayon%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Machina X Flayon Ch. HOLOSTARS-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Machina%20X%20Flayon%20%20HOLOSTARS&dates=20260105T010000Z/20260105T020000Z&details=URL: https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Machina%20X%20Flayon%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Machina%20X%20Flayon%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMachina%20X%20Flayon%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC060r4zABV18vcahAWR1n7w/join" target="_blank" class="s-link join">メン限</a>
@@ -349,19 +297,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Hakos Baelz Ch. hololive-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Hakos%20Baelz&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Hakos Baelz Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Hakos%20Baelz&dates=20260105T020000Z/20260105T030000Z&details=URL: https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Hakos%20Baelz&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCgmPnx-EEeOrZSg5Tiw7ZRQ/join" target="_blank" class="s-link join">メン限</a>
@@ -370,19 +317,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Koseki Bijou Ch. hololive-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koseki%20Bijou&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Koseki Bijou Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Koseki%20Bijou&dates=20260105T020000Z/20260105T030000Z&details=URL: https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koseki%20Bijou&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC9p_lqQ0FEDz327Vgf5JwqA/join" target="_blank" class="s-link join">メン限</a>
@@ -391,19 +337,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Aruran Ch. アルランディス</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=WjqQuU2nrpw" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Aruran Ch. アルランディス</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&dates=20260105T050000Z/20260105T060000Z&details=URL: https://www.youtube.com/watch?v=WjqQuU2nrpw" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=WjqQuU2nrpw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCKeAhJvy8zgXWbh9duVjIaQ/join" target="_blank" class="s-link join">メン限</a>
@@ -412,19 +357,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/uA7cNVWU5bk/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/uA7cNVWU5bk/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Matsuri Channel 夏色まつり</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Matsuri Channel 夏色まつり</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&dates=20260105T090000Z/20260105T100000Z&details=URL: https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCQ0UDLQCjY0rmuxCDE38FGg/join" target="_blank" class="s-link join">メン限</a>
@@ -433,19 +377,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Izuru Ch. 奏手イヅル</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Izuru Ch. 奏手イヅル</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&dates=20260105T093000Z/20260105T103000Z&details=URL: https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCZgOv3YDEs-ZnZWDYVwJdmA/join" target="_blank" class="s-link join">メン限</a>
@@ -454,19 +397,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Koyori ch. 博衣こより - holoX -</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Koyori ch. 博衣こより - holoX -</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&dates=20260105T100000Z/20260105T110000Z&details=URL: https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC6eWCld0KwmyHFbAqK3V-Rw/join" target="_blank" class="s-link join">メン限</a>
@@ -475,40 +417,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Jurard T Rexford Ch. HOLOSTARS-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Jurard%20T%20Rexford%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
-                        <a href="https://www.amazon.co.jp/s?k=Jurard%20T%20Rexford%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FJurard%20T%20Rexford%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天市場</a>
-                        <a href="https://www.youtube.com/channel/UCTVSOgYuSWmNAt-lnJPkEEw/join" target="_blank" class="s-link join">メン限</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
-            </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&dates=20260105T110000Z/20260105T120000Z&details=URL: https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCc88OV45ICgHbn3ZqLLb52w/join" target="_blank" class="s-link join">メン限</a>
@@ -517,19 +437,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Pekora Ch. 兎田ぺこら</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=07ndF1p8o30" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Pekora Ch. 兎田ぺこら</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&dates=20260105T110000Z/20260105T120000Z&details=URL: https://www.youtube.com/watch?v=07ndF1p8o30" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=07ndF1p8o30" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UC1DCedRgGHBdm81E1llLhOQ/join" target="_blank" class="s-link join">メン限</a>
@@ -538,19 +457,38 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Raora Panthera Ch. hololive-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raora%20Panthera&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Jurard T Rexford Ch. HOLOSTARS-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Jurard%20T%20Rexford%20%20HOLOSTARS&dates=20260105T110000Z/20260105T120000Z&details=URL: https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Jurard%20T%20Rexford%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Jurard%20T%20Rexford%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FJurard%20T%20Rexford%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天市場</a>
+                        <a href="https://www.youtube.com/channel/UCTVSOgYuSWmNAt-lnJPkEEw/join" target="_blank" class="s-link join">メン限</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
+            </div>
+            <div class="card-body">
+                <p class="ch-name">👤 Raora Panthera Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Raora%20Panthera&dates=20260105T180000Z/20260105T190000Z&details=URL: https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raora%20Panthera&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCl69AEx4MdqMZH7Jtsm7Tig/join" target="_blank" class="s-link join">メン限</a>
@@ -559,19 +497,18 @@
             </div>
         </div>
         <div class="card">
-            <div class="thumb">
-                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" alt="thumbnail" loading="lazy">
-                
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy">
+                <div class="badge upcoming">配信予定</div>
             </div>
-            <div class="card-info">
-                <div class="liver-name">👤 Goldbullet Ch. HOLOSTARS-EN</div>
-                <div class="catchphrase">必見の配信！</div>
-                <div class="desc">みんなで応援しましょう！</div>
-                <div class="action-area">
-                    <a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="main-btn">配信を応援（視聴）する</a>
-                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Goldbullet%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="share-btn">📢 この魅力を布教する</a>
-                    <div class="support-label">ライバーへの直接的な支援</div>
-                    <div class="support-links">
+            <div class="card-body">
+                <p class="ch-name">👤 Goldbullet Ch. HOLOSTARS-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E5%BF%9C%E6%8F%B4%E3%80%91Goldbullet%20%20HOLOSTARS&dates=20260106T030000Z/20260106T040000Z&details=URL: https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="btn reserve">📅 予約 (Google連携)</a><a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Goldbullet%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 推しを布教する</a>
+                    <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k=Goldbullet%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGoldbullet%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天市場</a>
                         <a href="https://www.youtube.com/channel/UCJv02SHZgav7Mv3V0kBOR8Q/join" target="_blank" class="s-link join">メン限</a>
@@ -579,9 +516,5 @@
                 </div>
             </div>
         </div></div>
-        </div>
-        <footer>
-            © 2026 ホロライブ応援ナビ | 非公式ホロライブ応援プロジェクト
-        </footer>
     </body>
     </html>
