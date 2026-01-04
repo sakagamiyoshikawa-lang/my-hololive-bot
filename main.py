@@ -42,21 +42,21 @@ def main():
         ch = v.get('channel', {})
         raw_ch_name = ch.get('name', 'Unknown')
         
-        # --- AIによる高度な分析 (多言語対応) ---
-        clean_name = raw_ch_name 
+        # --- AIによる分析 (名前の抽出 + 見どころ) ---
+        clean_name = raw_ch_name # 初期値
         highlight, msg = "見どころ満載の配信！", "みんなで視聴して応援しよう！"
         
         try:
-            # ENメンバー等も含め、名前をきれいに抜き出すための指示を強化
+            # 1つのプロンプトで名前の抽出と解説を同時に行い、API節約と精度向上を図る
             prompt = f"""
             以下のチャンネル名から『個人名』のみを抽出してください。
-            （英語表記のメンバーは英語のまま、日本語のメンバーは日本語で抽出）
-            また、配信タイトルが英語であっても、日本のファンが喜ぶ『応援見出し』と『応援文』を日本語で作ってください。
+            また、配信タイトルからファンが喜ぶ『見出し』と『応援文』を作ってください。
             
             チャンネル名: {raw_ch_name}
             タイトル: {title}
             
             出力形式(区切り文字|を使用): 名前|見出し(12字以内)|応援文(20字以内)
+            例: 風真いろは|✨ 圧巻の剣戟アクション|いろは殿の努力が光る神回！
             """
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             if res.text:
@@ -67,6 +67,7 @@ def main():
                     msg = parts[2].strip()
         except: pass
 
+        # 検索クエリを「個人名」のみに最適化
         search_query = urllib.parse.quote(f"{clean_name}")
         
         return f"""
@@ -103,5 +104,71 @@ def main():
     content_holo = build_content(list_holo, "Hololive")
     content_stars = build_content(list_stars, "Holostars")
 
-    # (HTML/CSS部分は以前と同じため省略... 必要であれば再度提示します)
-    # ... 以下、以前のコードのHTML出力部分をそのまま使用 ...
+    full_html = f"""
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{SITE_NAME}</title>
+        <style>
+            :root {{ --holo: #00c2ff; --bg: #f8fafc; --text: #1e293b; --sub: #64748b; }}
+            body {{ font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; }}
+            header {{ background: #fff; padding: 40px 20px; text-align: center; border-bottom: 3px solid var(--holo); }}
+            h1 {{ margin: 0; font-size: 1.8rem; color: var(--holo); font-weight: 900; }}
+            .motto {{ font-size: 0.85rem; color: var(--sub); margin-top: 10px; font-weight: bold; }}
+            .container {{ max-width: 1200px; margin: 30px auto; padding: 0 15px; }}
+            .tabs {{ display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }}
+            .tab-btn {{ padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }}
+            .tab-btn.active {{ background: var(--holo); color: #fff; box-shadow: 0 4px 12px rgba(0,194,255,0.3); }}
+            .grid {{ display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }}
+            .grid.active {{ display: grid; }}
+            .card {{ background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; }}
+            .thumb-box {{ position: relative; aspect-ratio: 16/9; background: #000; }}
+            .thumb-box img {{ width: 100%; height: 100%; object-fit: cover; }}
+            .org-tag {{ position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }}
+            .info {{ padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }}
+            .ch-name {{ font-size: 11px; color: var(--sub); margin-bottom: 8px; }}
+            .highlight {{ font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }}
+            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; line-height: 1.4; }}
+            .ai-msg {{ background: #f0f9ff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; border-left: 4px solid var(--holo); margin-bottom: 20px; }}
+            .actions {{ margin-top: auto; padding-top: 15px; border-top: 1px solid #f1f5f9; }}
+            .btn-main {{ display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 10px; font-weight: 900; margin-bottom: 15px; }}
+            .support-text {{ font-size: 10px; color: var(--sub); text-align: center; margin-bottom: 8px; font-weight: bold; }}
+            .merch-links {{ display: flex; gap: 5px; }}
+            .btn-sub {{ flex: 1; text-decoration: none; background: #f8fafc; color: var(--sub); text-align: center; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; border: 1px solid #e2e8f0; }}
+            .amz {{ border-bottom: 3px solid #ff9900; }}
+            .rak {{ border-bottom: 3px solid #bf0000; }}
+            .error-msg {{ grid-column: 1/-1; text-align: center; padding: 50px; color: var(--sub); font-weight: bold; }}
+        </style>
+        <script>
+            function tab(id) {{
+                document.querySelectorAll('.grid').forEach(g => g.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                document.getElementById('btn-' + id).classList.add('active');
+            }}
+        </script>
+    </head>
+    <body onload="tab('holo')">
+        <header>
+            <h1>💙 {SITE_NAME}</h1>
+            <div class="motto">推しの素晴らしさを再発見し、活動をみんなで支援するファンポータル</div>
+        </header>
+        <div class="container">
+            <div class="tabs">
+                <button id="btn-holo" class="tab-btn active" onclick="tab('holo')">Hololive</button>
+                <button id="btn-stars" class="tab-btn" onclick="tab('stars')">Holostars</button>
+            </div>
+            <div id="holo" class="grid active">{content_holo}</div>
+            <div id="stars" class="grid">{content_stars}</div>
+        </div>
+        <footer style="text-align: center; padding: 60px; font-size: 12px; color: #94a3b8;">© 2026 {SITE_NAME} | 非公式応援プロジェクト</footer>
+    </body>
+    </html>"""
+
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(full_html)
+
+if __name__ == "__main__":
+    main()
