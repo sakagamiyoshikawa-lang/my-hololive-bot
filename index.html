@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ホロ活ナビ</title>
         <style>
-            body { font-family: sans-serif; background: #f0f4f8; color: #2d3748; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+            body { font-family: sans-serif; background: #f4f7f9; color: #2d3748; margin: 0; display: flex; height: 100vh; overflow: hidden; }
             nav { width: 220px; background: #fff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }
             .nav-item { padding: 15px 20px; cursor: pointer; font-weight: bold; color: #718096; border-left: 4px solid transparent; }
             .nav-item.active { background: #ebf8ff; color: #00b5d8; border-left-color: #00b5d8; }
@@ -19,7 +19,7 @@
             .view-count { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
             .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
             .ch-name { font-size: 12px; color: #00b5d8; font-weight: bold; margin-bottom: 5px; }
-            .v-title { font-size: 14px; font-weight: bold; height: 3em; overflow: hidden; margin-bottom: 15px; }
+            .v-title { font-size: 14px; font-weight: bold; height: 3em; overflow: hidden; margin-bottom: 10px; }
             .links { display: flex; gap: 5px; margin-top: auto; }
             .btn { flex: 1; text-decoration: none; font-size: 10px; font-weight: bold; text-align: center; padding: 8px; border-radius: 6px; background: #edf2f7; color: #4a5568; }
             .btn-main { background: #00b5d8; color: #fff; }
@@ -40,8 +40,24 @@
             <div id="btn-stars" class="nav-item" onclick="show('stars')">Holostars TOP 50</div>
         </nav>
         <main>
-            <div id="holo" class="grid active"><p>データ読み込み中、または取得失敗</p></div>
-            <div id="stars" class="grid"><p>データ読み込み中、または取得失敗</p></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px; color: #718096;">
+                <span>注目コンテンツ（自動更新）</span>
+                <span>最終更新: 01/04 12:32</span>
+            </div>
+            <div id="holo" class="grid active">
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <p style="font-size: 3rem;">⚠️</p>
+                <p style="font-weight: bold; color: #e53e3e;">ホロライブのデータ取得に失敗しました</p>
+                <p style="font-size: 0.8rem; color: #a0aec0;">理由: API Error: 500</p>
+            </div>
+            </div>
+            <div id="stars" class="grid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <p style="font-size: 3rem;">⚠️</p>
+                <p style="font-weight: bold; color: #e53e3e;">ホロスターズのデータ取得に失敗しました</p>
+                <p style="font-size: 0.8rem; color: #a0aec0;">理由: API Error: 500</p>
+            </div>
+            </div>
         </main>
     </body>
     </html>
