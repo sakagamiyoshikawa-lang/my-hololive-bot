@@ -1,37 +1,414 @@
 
-    <html>
+    <!DOCTYPE html>
+    <html lang="ja">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>HoloAI Tracker - 最新ホロライブ判定</title>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+        <title>ホロ活ナビ | ホロライブ最新情報AIナビ</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
         <style>
-            :root { --primary: #33a6ff; --accent: #ff66b2; --bg: #f8fafc; }
-            body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            h1 { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 30px; }
-            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-            .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-            .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-            .thumb { width: 100%; height: 180px; object-fit: cover; }
-            .content { padding: 15px; }
-            .category { display: inline-block; background: var(--accent); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 10px; }
-            .title { font-weight: bold; font-size: 0.95rem; line-height: 1.4; height: 2.8em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-            .footer { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #666; }
-            .btn { text-decoration: none; color: white; background: var(--primary); padding: 5px 15px; border-radius: 5px; }
-            .ad-section { margin-top: 50px; padding: 30px; background: #fff; border-radius: 12px; text-align: center; border: 2px dashed var(--primary); }
+            :root { --main: #00c2ff; --sub: #ff66b2; --dark: #1a202c; --light: #f7fafc; }
+            body { font-family: 'Noto Sans JP', sans-serif; background: var(--light); margin: 0; color: var(--dark); line-height: 1.6; }
+            header { background: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--main); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+            header h1 { margin: 0; color: var(--main); font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; }
+            .hero-text { color: #718096; font-size: 1rem; margin-top: 10px; font-weight: bold; }
+            .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+            .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
+            .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+            .thumb-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #eee; }
+            .thumb { width: 100%; height: 100%; object-fit: cover; }
+            .status-badge { position: absolute; top: 12px; left: 12px; padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: bold; color: white; background: rgba(0,0,0,0.7); }
+            .live { background: #e53e3e !important; }
+            .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+            .ch-name { font-size: 0.9rem; font-weight: bold; color: #4a5568; margin-bottom: 8px; }
+            .cat-tag { display: inline-block; background: var(--sub); color: white; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; align-self: flex-start; }
+            .video-title { font-weight: bold; font-size: 1.05rem; color: var(--dark); margin-bottom: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.8em; }
+            .ai-desc { background: #f1f5f9; padding: 12px; border-radius: 12px; font-size: 0.85rem; color: #475569; margin-bottom: 20px; border-left: 4px solid var(--main); flex-grow: 1; }
+            .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+            .btn { text-decoration: none; padding: 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; text-align: center; transition: 0.2s; }
+            .btn-yt { background: var(--dark); color: white; grid-column: span 2; margin-bottom: 5px; }
+            .btn-amz { background: #ff9900; color: white; }
+            .btn-rak { background: #bf0000; color: white; }
+            .btn:hover { opacity: 0.8; filter: brightness(1.1); }
+            footer { text-align: center; padding: 60px 20px; background: white; margin-top: 60px; color: #a0aec0; border-top: 1px solid #edf2f7; }
         </style>
     </head>
     <body>
+        <header>
+            <h1>🌟 ホロ活ナビ</h1>
+            <p class="hero-text">AIが最新のホロライブ配信を分析・ナビゲート</p>
+            <div style="font-size: 0.8rem; color: #cbd5e0; margin-top: 15px;">最終更新: 2026-01-04 04:09</div>
+        </header>
         <div class="container">
-            <h1>🌟 HoloAI Tracker <span style="font-size: 1rem; color: #999;">(2026-01-04 03:34)</span></h1>
             <div class="grid">
     
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/NEaJ-TqSun0/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/NEaJ-TqSun0/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
             </div>
-            <div class="ad-section">
-                <h3>📢 今週の注目アイテム</h3>
-                <p>（ここにAmazonアソシエイトなどの広告を掲載できます）</p>
+            <div class="info">
+                <div class="ch-name">👤 하나코 나나 HANAKO NANA</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">처음 사귄 일본인 친구가 너무너무 귀여운 건에 대하여</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=NEaJ-TqSun0" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%ED%95%98%EB%82%98%EC%BD%94%20%EB%82%98%EB%82%98%20HANAKO%20NANA&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%ED%95%98%EB%82%98%EC%BD%94%20%EB%82%98%EB%82%98%20HANAKO%20NANA%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
             </div>
         </div>
-    </body></html>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/2I2-Klilz2M/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/2I2-Klilz2M/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Hamburger 拉普總帥愛吃漢堡排 ch.</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">不為人知的琉依頭號粉絲 #vtuber中文 #shorts</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=2I2-Klilz2M" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Hamburger%20%E6%8B%89%E6%99%AE%E7%B8%BD%E5%B8%A5%E6%84%9B%E5%90%83%E6%BC%A2%E5%A0%A1%E6%8E%92%20ch.&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Hamburger%20%E6%8B%89%E6%99%AE%E7%B8%BD%E5%B8%A5%E6%84%9B%E5%90%83%E6%BC%A2%E5%A0%A1%E6%8E%92%20ch.%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/eazauV0HoE0/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/eazauV0HoE0/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Alpha.K</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Bae Mistakenly Thought Mumei Used To Send Her My Little Pony Memes...</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=eazauV0HoE0" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Alpha.K&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Alpha.K%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/4Zk1l5uRUBA/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/4Zk1l5uRUBA/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 little ghost</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">New Outfits + Q&A Relay! | New Year's Outfits【hololive/DEV_IS】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=4Zk1l5uRUBA" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20little%20ghost&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20little%20ghost%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/vjKaoH1BclQ/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/vjKaoH1BclQ/mqdefault.jpg'">
+                <div class="status-badge live">LIVE中</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 メイカちゃんねる</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">【グランツーリスモ7】#V1GP ブルーチーム顔合わせ!!!!レースは俺にまかせろ~~!!【歌衣メイカ・輪堂千速 ・天硝路ろまん・宮園 拓】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=vjKaoH1BclQ" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%83%A1%E3%82%A4%E3%82%AB%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%83%A1%E3%82%A4%E3%82%AB%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/dQPzsHi5mpo/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/dQPzsHi5mpo/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 GetSomeClips!</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">A Mysterious Voice Caught on Lamy's Stream, and it's so terrifying! [Hololive]</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=dQPzsHi5mpo" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20GetSomeClips%21&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20GetSomeClips%21%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/AACr39Vw9Vs/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/AACr39Vw9Vs/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 ホロの面白シーン集</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">スバルがひたすらス虐されまくる突発ホロゴッフィーが面白すぎたw【ホロライブ 切り抜き／獅白ぼたん／大空スバル／尾丸ポルカ／輪堂千速】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=AACr39Vw9Vs" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%83%9B%E3%83%AD%E3%81%AE%E9%9D%A2%E7%99%BD%E3%82%B7%E3%83%BC%E3%83%B3%E9%9B%86&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%83%9B%E3%83%AD%E3%81%AE%E9%9D%A2%E7%99%BD%E3%82%B7%E3%83%BC%E3%83%B3%E9%9B%86%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/ZFic4xw5xUo/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/ZFic4xw5xUo/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Chikara clip</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Shiori and CC Trying to Bully Duo chaostic kusogaki!!</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=ZFic4xw5xUo" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Chikara%20clip&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Chikara%20clip%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/7a_WqptdUJg/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/7a_WqptdUJg/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Kazuki ICh. 【Ame Clip】</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Cecilia and Gigi Get So Lost in Their Own World They Forget Shiori and Biboo Are Left Behind</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=7a_WqptdUJg" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Kazuki%20ICh.%20%E3%80%90Ame%20Clip%E3%80%91&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Kazuki%20ICh.%20%E3%80%90Ame%20Clip%E3%80%91%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/C2xVZ4e2zVo/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/C2xVZ4e2zVo/mqdefault.jpg'">
+                <div class="status-badge live">LIVE中</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 astel ch.アステル</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">【雑談 / Genki】正月って何日まで?   / アステル</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=C2xVZ4e2zVo" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20astel%20ch.%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AB&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20astel%20ch.%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AB%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/ZM_TcofZXnc/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/ZM_TcofZXnc/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 社畜加班中</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">船長這樣爆氣大吼喉嚨還好嗎w 團長大掃除掃出奇怪的垃圾讓船長看了超傻眼w【宝鐘マリン】【兎田ぺこら】【白銀ノエル】【不知火フレア】【Hololive中文】【Vtuber精華】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=ZM_TcofZXnc" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E7%A4%BE%E7%95%9C%E5%8A%A0%E7%8F%AD%E4%B8%AD&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E7%A4%BE%E7%95%9C%E5%8A%A0%E7%8F%AD%E4%B8%AD%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg'">
+                <div class="status-badge ">予約枠</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Polka Ch. 尾丸ポルカ</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">#2【魔法少女ノ魔女裁判】まさか、本当に人が■ぬなんて事あるの?※ネタバレあり【尾丸ポルカ/ホロライブ2】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/XwGYsTYa4yM/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/XwGYsTYa4yM/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Perrino Ch.</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Gigi and Ceci Was Laughing So Hard When Biboo Didn't Understan About Guncle Mean【Hololive EN】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=XwGYsTYa4yM" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Perrino%20Ch.&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Perrino%20Ch.%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/xb8qJ6XrD94/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/xb8qJ6XrD94/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Sanest Tamanegi</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Subaru Explains Gen 2 Relationship Chart in 2026【Hololive】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=xb8qJ6XrD94" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Sanest%20Tamanegi&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Sanest%20Tamanegi%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/S65ks_uZODk/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/S65ks_uZODk/mqdefault.jpg'">
+                <div class="status-badge ">予約枠</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Polka Ch. 尾丸ポルカ</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">【京都金杯 中山金杯】初競馬配信🔰新春の競馬予想💬素敵な一年になりますように【尾丸ポルカ/ホロライブ】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=S65ks_uZODk" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/IAKWtBMR0tw/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/IAKWtBMR0tw/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Gomi Simpington Ch.</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">𝗕𝗶𝗯𝗼𝗼 𝗽𝘂𝘀𝗵𝗶𝗻𝗴 𝗮 𝗡𝗶𝗰𝗸𝗻𝗮𝗺𝗲 𝗻𝗼𝘁 𝗸𝗻𝗼𝘄𝗶𝗻𝗴 𝘄𝗵𝗮𝘁 𝗶𝘁 𝗺𝗲𝗮𝗻𝘀 𝗶𝘀 𝗛𝗶𝗹𝗮𝗿𝗶𝗼𝘂𝘀</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=IAKWtBMR0tw" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Gomi%20Simpington%20Ch.&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Gomi%20Simpington%20Ch.%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/NEKBW88Y36k/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/NEKBW88Y36k/mqdefault.jpg'">
+                <div class="status-badge live">LIVE中</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">【グランツーリスモ7】#V1GP TEAM BLUEの愉快な愉快なメンバーと初めまして!!【#輪堂千速 / #hololivedev_is  #FLOWGLOW 】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=NEKBW88Y36k" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Chihaya%20Ch.%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%20-%20FLOW%20GLOW&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Chihaya%20Ch.%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%20-%20FLOW%20GLOW%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/qJE0DSJgPNo/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/qJE0DSJgPNo/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Shark ch.</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">Axel RANTS ABOUT GOONERS and the AI CRISIS!【Holostars EN | Axel Syrios 】</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=qJE0DSJgPNo" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Shark%20ch.&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Shark%20ch.%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/vyQ4uGUbHS0/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/vyQ4uGUbHS0/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 hololive DEV_IS FLOW GLOW</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">【歌みた】宵々古今 【公開中!】#FLOWGLOW #shorts  #ホロライブ  #hololive #hololivedev_is</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=vyQ4uGUbHS0" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20hololive%20DEV_IS%20FLOW%20GLOW&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20hololive%20DEV_IS%20FLOW%20GLOW%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="thumb-container">
+                <img src="https://img.youtube.com/vi/RXmPqoAoTLM/maxresdefault.jpg" class="thumb" onerror="this.src='https://img.youtube.com/vi/RXmPqoAoTLM/mqdefault.jpg'">
+                <div class="status-badge ">アーカイブ</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 切り抜き阿鼻叫喚</div>
+                <span class="cat-tag">Other</span>
+                <div class="video-title">これがホロライブ一期生アキ・ローゼンタール #michaelbay #meme</div>
+                <div class="ai-desc">🤖 配信情報をチェックしよう！</div>
+                <div class="links">
+                    <a href="https://www.youtube.com/watch?v=RXmPqoAoTLM" target="_blank" class="btn btn-yt">YouTubeで視聴</a>
+                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E9%98%BF%E9%BC%BB%E5%8F%AB%E5%96%9A&tag=191383501790a-22" target="_blank" class="btn btn-amz">Amazonグッズ</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E9%98%BF%E9%BC%BB%E5%8F%AB%E5%96%9A%2F" target="_blank" class="btn btn-rak">楽天ブックス</a>
+                </div>
+            </div>
+        </div>
+        
+            </div>
+        </div>
+        <footer>
+            <p>© 2026 ホロ活ナビ | AI分析ポータル</p>
+            <p style="font-size: 0.7rem;">当サイトはファンプロジェクトです。紹介リンクを通じて収益が発生する場合があります。</p>
+        </footer>
+    </body>
+    </html>
     
