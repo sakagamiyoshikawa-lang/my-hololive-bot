@@ -16,72 +16,84 @@ SITE_NAME = "ホロライブ応援ナビ"
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-def fetch_content(org):
-    """情報の精度を上げるため、再生数上位＋新着を織り交ぜて取得"""
-    url = "https://holodex.net/api/v2/videos"
-    params = {"org": org, "limit": 40, "sort": "view_count", "order": "desc"}
+def fetch_data(endpoint, org):
+    """APIからデータを取得。失敗しても止まらないように空リストを返す"""
+    url = f"https://holodex.net/api/v2/{endpoint}"
+    params = {"org": org, "limit": 40}
+    if endpoint == "videos":
+        params.update({"sort": "published_at", "order": "desc", "type": "clip,stream"})
+    
     headers = {"X-APIKEY": HOLODEX_API_KEY}
     try:
         res = requests.get(url, params=params, headers=headers, timeout=20)
-        return (res.json() if res.status_code == 200 else []), "OK"
+        if res.status_code == 200:
+            data = res.json()
+            return data if isinstance(data, list) else []
+        return []
     except:
-        return [], "Error"
+        return []
 
 def main():
-    list_holo, _ = fetch_content("Hololive")
+    # 1. データの多角的な取得（ライブ＋最新ビデオ）
+    list_holo = fetch_data("live", "Hololive") + fetch_data("videos", "Hololive")
     time.sleep(1)
-    list_stars, _ = fetch_content("Holostars")
+    list_stars = fetch_data("live", "Holostars") + fetch_data("videos", "Holostars")
     
     client = genai.Client(api_key=GEMINI_API_KEY)
 
-    def create_support_card(v, org_tag):
-        if not v or not isinstance(v, dict): return ""
+    def create_card(v, org_tag):
+        if not v or not isinstance(v, dict) or not v.get('id'): return ""
         v_id, title = v.get('id'), v.get('title', 'No Title')
         ch = v.get('channel', {})
         ch_name = ch.get('name', 'Unknown')
         
-        # --- AIによる「尊いポイント」の抽出 ---
-        highlight = "配信をチェックして見どころを見つけよう！"
-        support_msg = "公式チャンネルを登録して応援しよう！"
+        # AIによる見どころ分析
+        highlight, msg = "見どころ満載の配信！", "みんなで視聴して応援しよう！"
         try:
-            prompt = f"ホロライブファンとして、この配信タイトル『{title}』の『推しポイント』を熱く分析して。15文字以内のエモい見出し|20文字以内の応援コメント。形式: 見出し|コメント"
+            prompt = f"ファン目線でこの動画の見どころを分析して。見出し(12文字以内)|応援文(20文字以内)。タイトル: {title}"
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             if res.text:
                 parts = res.text.strip().split('|')
                 highlight = parts[0].strip()
-                support_msg = parts[1].strip() if len(parts) > 1 else support_msg
+                msg = parts[1].strip() if len(parts) > 1 else msg
         except: pass
 
-        query = urllib.parse.quote(f"{ch_name} 応援")
-        
+        query = urllib.parse.quote(f"{ch_name} グッズ")
         return f"""
         <div class="card">
-            <div class="thumb-area">
+            <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/{v_id}/mqdefault.jpg" loading="lazy">
-                <div class="tag">{org_tag}</div>
+                <div class="org-tag">{org_tag}</div>
             </div>
-            <div class="body">
-                <div class="ch-info">
-                    <span class="ch-name">👤 {ch_name}</span>
-                </div>
-                <div class="highlight-title">✨ {highlight}</div>
-                <div class="video-title">{title}</div>
-                <div class="ai-support-msg">💬 {support_msg}</div>
-                
-                <div class="action-box">
-                    <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-primary">今すぐ応援しに行く</a>
-                    <div class="support-label">ライバーの活動を支援する</div>
+            <div class="info">
+                <div class="ch-name">👤 {ch_name}</div>
+                <div class="highlight">✨ {highlight}</div>
+                <div class="v-title">{title}</div>
+                <div class="ai-msg">💬 {msg}</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
+                    <div class="support-text">＼ 活動を支える布教・支援 ／</div>
                     <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k={query}&tag={AMAZON_ID}" target="_blank" class="btn-sub amz">関連アイテム (Amazon)</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{query}%2F" target="_blank" class="btn-sub rak">楽天で支援</a>
+                        <a href="https://www.amazon.co.jp/s?k={query}&tag={AMAZON_ID}" target="_blank" class="btn-sub">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{query}%2F" target="_blank" class="btn-sub">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
         """
 
-    content_holo = "".join([create_support_card(v, "Hololive") for v in list_holo])
-    content_stars = "".join([create_support_card(v, "Holostars") for v in list_stars])
+    # 重複を除去してHTML化
+    def build_content(v_list, tag):
+        seen = set()
+        html = ""
+        for v in v_list:
+            if v.get('id') not in seen:
+                html += create_card(v, tag)
+                seen.add(v.get('id'))
+        return html if html else "<p class='error-msg'>現在データ更新中です。しばらくお待ちください。</p>"
+
+    content_holo = build_content(list_holo, "Hololive")
+    content_stars = build_content(list_stars, "Holostars")
 
     full_html = f"""
     <!DOCTYPE html>
@@ -90,48 +102,38 @@ def main():
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{SITE_NAME}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
         <style>
-            :root {{ --holo: #00c2ff; --stars: #ffb800; --txt: #2d3748; --sub-txt: #718096; --bg: #f7fafc; }}
-            body {{ font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--txt); margin: 0; }}
+            :root {{ --holo: #00c2ff; --bg: #f8fafc; --text: #1e293b; --sub: #64748b; }}
+            body {{ font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; }}
             header {{ background: #fff; padding: 40px 20px; text-align: center; border-bottom: 3px solid var(--holo); }}
-            header h1 {{ margin: 0; font-size: 2rem; color: var(--holo); font-weight: 900; }}
-            .motto {{ font-size: 0.9rem; color: var(--sub-txt); margin-top: 10px; font-weight: bold; }}
-            
+            h1 {{ margin: 0; font-size: 1.8rem; color: var(--holo); font-weight: 900; }}
+            .motto {{ font-size: 0.85rem; color: var(--sub); margin-top: 10px; font-weight: bold; }}
             .container {{ max-width: 1200px; margin: 30px auto; padding: 0 15px; }}
-            .nav {{ display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }}
-            .nav-btn {{ padding: 12px 30px; border: none; background: #fff; cursor: pointer; border-radius: 50px; font-weight: 900; color: var(--sub-txt); box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }}
-            .nav-btn.active {{ background: var(--holo); color: #fff; box-shadow: 0 4px 15px rgba(0,194,255,0.3); }}
-
-            .grid {{ display: none; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }}
+            .tabs {{ display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }}
+            .tab-btn {{ padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }}
+            .tab-btn.active {{ background: var(--holo); color: #fff; box-shadow: 0 4px 12px rgba(0,194,255,0.3); }}
+            .grid {{ display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }}
             .grid.active {{ display: grid; }}
-
-            .card {{ background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: 0.3s; }}
-            .card:hover {{ transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }}
-            
-            .thumb-area {{ position: relative; aspect-ratio: 16/9; }}
-            .thumb-area img {{ width: 100%; height: 100%; object-fit: cover; }}
-            .tag {{ position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; }}
-
-            .body {{ padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }}
-            .ch-name {{ color: var(--holo); font-weight: 900; font-size: 0.85rem; }}
-            .highlight-title {{ font-size: 1.2rem; font-weight: 900; margin: 10px 0; color: #1a202c; }}
-            .video-title {{ font-size: 0.9rem; color: var(--sub-txt); line-height: 1.4; height: 2.8em; overflow: hidden; margin-bottom: 15px; }}
-            .ai-support-msg {{ background: #f0f9ff; padding: 15px; border-radius: 12px; font-size: 0.9rem; border-left: 5px solid var(--holo); font-weight: bold; margin-bottom: 20px; }}
-
-            .action-box {{ margin-top: auto; border-top: 1px solid #edf2f7; padding-top: 20px; }}
-            .btn-primary {{ display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 12px; font-weight: 900; transition: 0.2s; }}
-            .support-label {{ font-size: 0.75rem; color: var(--sub-txt); text-align: center; margin: 15px 0 8px; font-weight: bold; }}
-            .merch-links {{ display: flex; gap: 8px; }}
-            .btn-sub {{ flex: 1; text-decoration: none; font-size: 0.7rem; text-align: center; padding: 8px; border-radius: 8px; font-weight: bold; background: #f8fafc; color: var(--sub-txt); border: 1px solid #edf2f7; }}
-            .btn-sub:hover {{ background: #edf2f7; }}
-
-            footer {{ text-align: center; padding: 60px; color: var(--sub-txt); font-size: 0.8rem; }}
+            .card {{ background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; }}
+            .thumb-box {{ position: relative; aspect-ratio: 16/9; }}
+            .thumb-box img {{ width: 100%; height: 100%; object-fit: cover; }}
+            .org-tag {{ position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }}
+            .info {{ padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }}
+            .ch-name {{ font-size: 11px; color: var(--holo); font-weight: 900; margin-bottom: 8px; }}
+            .highlight {{ font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }}
+            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; }}
+            .ai-msg {{ background: #f0f9ff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; border-left: 4px solid var(--holo); margin-bottom: 20px; }}
+            .actions {{ margin-top: auto; padding-top: 15px; border-top: 1px solid #f1f5f9; }}
+            .btn-main {{ display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 10px; font-weight: 900; margin-bottom: 15px; }}
+            .support-text {{ font-size: 10px; color: var(--sub); text-align: center; margin-bottom: 8px; font-weight: bold; }}
+            .merch-links {{ display: flex; gap: 5px; }}
+            .btn-sub {{ flex: 1; text-decoration: none; background: #f8fafc; color: var(--sub); text-align: center; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; border: 1px solid #e2e8f0; }}
+            .error-msg {{ grid-column: 1/-1; text-align: center; padding: 50px; color: var(--sub); font-weight: bold; }}
         </style>
         <script>
             function tab(id) {{
                 document.querySelectorAll('.grid').forEach(g => g.classList.remove('active'));
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 document.getElementById('btn-' + id).classList.add('active');
             }}
@@ -140,17 +142,17 @@ def main():
     <body onload="tab('holo')">
         <header>
             <h1>💙 {SITE_NAME}</h1>
-            <div class="motto">推しを広め、活動を支える。ファンのための応援ポータル</div>
+            <div class="motto">推しの素晴らしさを広め、活動を支援するファンポータル</div>
         </header>
         <div class="container">
-            <div class="nav">
-                <button id="btn-holo" class="nav-btn active" onclick="tab('holo')">Hololive</button>
-                <button id="btn-stars" class="nav-btn" onclick="tab('stars')">Holostars</button>
+            <div class="tabs">
+                <button id="btn-holo" class="tab-btn active" onclick="tab('holo')">Hololive</button>
+                <button id="btn-stars" class="tab-btn" onclick="tab('stars')">Holostars</button>
             </div>
             <div id="holo" class="grid active">{content_holo}</div>
             <div id="stars" class="grid">{content_stars}</div>
         </div>
-        <footer>© {datetime.now().year} {SITE_NAME} | 非公式ファンプロジェクト</footer>
+        <footer style="text-align: center; padding: 40px; font-size: 12px; color: #94a3b8;">© 2026 {SITE_NAME} | 非公式応援プロジェクト</footer>
     </body>
     </html>"""
 
