@@ -7,36 +7,28 @@ import re
 import time
 
 # ==========================================
-# 🌟 設定・特選コレクション（ユーザー提供リンク）
+# 🌟 設定・アフィリエイトID
 # ==========================================
 AMAZON_ID = "191383501790a-22"
 RAKUTEN_ID = "4fb92fbd.48f820ce.4fb92fbe.82189b12"
 SITE_NAME = "ホロ応援ナビ"
 SITE_URL = "https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" 
 
-# ユーザー提供の全商品をリスト化
-FEATURED_ITEMS = [
-    # 宝鐘マリン ラム酒
-    '<table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10001628&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-23-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="マリンズラム"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】マリンズラム ホロライブ 宝鐘マリン</a><br><span>価格：26,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>',
-    # さくらみこ 酔うたい焼き
-    '<table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10001383&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-19-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="酔うたい焼き さくらみこ"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】酔うたい焼き さくらみこすぺしゃる</a><br><span>価格：12,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>',
-    # 白上フブキ 酔う抹茶プディング
-    '<table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-27%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10001766&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-27-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="酔う抹茶プディング"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-27%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】フブキングダム御用達『酔う抹茶プディング』</a><br><span>価格：12,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-27%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>',
-    # 兎田ぺこら 百年梅酒
-    '<table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-16%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10000851&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-16-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="百年梅酒ぺこらver"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-16%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】百年梅酒ぺこらver（梅酒大会優勝）</a><br><span>価格：13,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-16%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>',
-    # 白銀ノエル ノエルのポーション
-    '<table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-18%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10000986&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fimgrc0121998625.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="ノエルのポーション"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-18%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】プレミアムクラフトジン「ノエルのポーション」</a><br><span>価格：27,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-18%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>'
-]
-
-FEATURE_ITEM_SECTION = f"""
-<div class="featured-section">
-    <h2 class="section-title">✨ 推しの活動を支える特選アイテム</h2>
-    <div class="featured-scroll">
-        <div class="featured-container">
-            {"".join(FEATURED_ITEMS)}
-        </div>
+# 最下部に移動した「お宝特選コレクション」HTML
+FEATURED_FOOTER_HTML = """
+<section class="featured-footer">
+    <h2 class="footer-section-title">✨ 推しの活動を支える特選アイテム</h2>
+    <div class="footer-scroll-container">
+        <div class="footer-scroll-track">
+            <div class="item-wrap">
+                <table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10001628&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-23-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="マリンズラム"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】マリンズラム 宝鐘マリン 珠玉のラム酒</a><br><span>価格：26,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-23%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;font-weight:bold;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>
+            </div>
+            <div class="item-wrap">
+                <table border="0" cellpadding="0" cellspacing="0"><tr><td><div style="border:1px solid #95a5a6;border-radius:.75rem;background-color:#FFFFFF;width:504px;margin:10px;padding:5px;text-align:center;overflow:hidden;"><table><tr><td style="width:240px"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><img src="https://hbb.afl.rakuten.co.jp/hgb/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?me_id=1375600&item_id=10001383&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ff082015-mito%2Fcabinet%2F10011667%2Fdw-19-1.jpg%3F_ex%3D240x240&s=240x240&t=picttext" border="0" style="margin:2px" alt="酔うたい焼き"></a></td><td style="vertical-align:top;width:248px;display: block;"><p style="font-size:12px;line-height:1.4em;text-align:left;margin:0px;padding:2px 6px;word-wrap:break-word"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">【ふるさと納税】酔うたい焼き さくらみこすぺしゃる</a><br><span>価格：12,000円</span></p><div style="margin:10px;"><a href="https://hb.afl.rakuten.co.jp/ichiba/4fbe0f95.f3813a3e.4fbe0f96.1061a182/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff082015-mito%2Fdw-19%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener"><div style="width:100%;height:27px;background-color:#bf0000;color:#fff;font-size:12px;line-height:27px;border-radius:16px;text-align:center;font-weight:bold;"> 楽天で購入 </div></a></div></td></tr></table></div></td></tr></table>
+            </div>
+            </div>
     </div>
-</div>
+</section>
 """
 # ==========================================
 
@@ -59,7 +51,7 @@ def fetch_pure_holo():
             res = requests.get(f"https://holodex.net/api/v2/{ep}", params=params, headers=headers, timeout=20)
             if res.status_code == 200:
                 data = res.json()
-                combined.extend([v for v in data if isinstance(data, list) and v.get('channel', {}).get('org') == 'Hololive'])
+                combined.extend([v for v in data if isinstance(v, dict) and v.get('channel', {}).get('org') == 'Hololive'])
             time.sleep(1)
         except: pass
     return combined
@@ -76,16 +68,16 @@ def main():
         raw_ch_name, ch_id = ch.get('name', 'Unknown'), ch.get('id')
         clean_name = super_clean_name(raw_ch_name)
         
-        highlight, msg = "必見の配信！", "みんなで応援しましょう！"
+        highlight, msg = "注目の配信！", "一緒に応援しましょう！"
         try:
-            prompt = f"配信『{title}』の魅力を10文字程度の見出し|15文字の紹介文で書いて。"
+            prompt = f"配信『{title}』の魅力を10文字程度の見出し|15文字の紹介文で書いて。ホロライブ公式のトーンで。"
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             if res.text:
                 parts = res.text.strip().split('|')
                 highlight, msg = parts[0].strip(), parts[1].strip() if len(parts) > 1 else msg
         except: pass
 
-        badge = '<div class="badge live">LIVE中</div>' if status == 'live' else ''
+        badge = '<div class="badge live">LIVE</div>' if status == 'live' else ''
         main_btn = f'<a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn watch">📺 視聴・応援に行く</a>'
         
         if status == 'upcoming' and raw_start:
@@ -94,10 +86,10 @@ def main():
                 st_dt = datetime.strptime(raw_start.replace('Z', '')[:19], '%Y-%m-%dT%H:%M:%S')
                 st, et = st_dt.strftime('%Y%m%dT%H%M%SZ'), (st_dt + timedelta(hours=1)).strftime('%Y%m%dT%H%M%SZ')
                 cal_url = f"https://www.google.com/calendar/render?action=TEMPLATE&text={urllib.parse.quote('【視聴予約】'+title)}&dates={st}/{et}&details={urllib.parse.quote('出演: '+raw_ch_name)}"
-                main_btn = f'<a href="{cal_url}" target="_blank" class="btn reserve">📅 予約 (Googleカレンダー)</a>' + main_btn
+                main_btn = f'<a href="{cal_url}" target="_blank" class="btn reserve">📅 予約 (Google連携)</a>' + main_btn
             except: pass
 
-        share_text = urllib.parse.quote(f"✨{highlight}\n{msg}\n#ホロライブ応援ナビ #{clean_name}")
+        share_text = urllib.parse.quote(f"✨{highlight}\n{msg}\n#ホロ応援ナビ #{clean_name}")
         search_query = urllib.parse.quote(clean_name)
         
         return f"""
@@ -109,7 +101,7 @@ def main():
                 <div class="quote-box">{msg}</div>
                 <div class="actions">
                     {main_btn}
-                    <a href="https://twitter.com/intent/tweet?text={share_text}&url={SITE_URL}" target="_blank" class="btn share">📢 この配信を布教する</a>
+                    <a href="https://twitter.com/intent/tweet?text={share_text}&url={SITE_URL}" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
                         <a href="https://www.amazon.co.jp/s?k={search_query}&tag={AMAZON_ID}" target="_blank" class="s-link amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{search_query}%2F" target="_blank" class="s-link rak">楽天</a>
@@ -130,40 +122,66 @@ def main():
         <title>{SITE_NAME}</title>
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
         <style>
-            :root {{ --main: #00c2ff; --bg: #f0f4f8; --card: #fff; }}
-            body {{ font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }}
-            header {{ background: linear-gradient(135deg, #00c2ff, #0078ff); color: #fff; padding: 40px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); }}
-            h1 {{ margin: 0; font-size: 2rem; font-weight: 900; }}
+            :root {{ --main: #00c2ff; --bg: #f8fafc; --white: #ffffff; }}
+            body {{ font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; color: #333; }}
             
-            .featured-section {{ max-width: 1400px; margin: 40px auto; padding: 0 20px; }}
-            .section-title {{ font-size: 1.2rem; font-weight: 900; color: #4a5568; margin-bottom: 20px; text-align:center; }}
-            .featured-scroll {{ overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; }}
-            .featured-container {{ display: flex; gap: 20px; width: max-content; }}
+            /* --- ロゴを意識したモダンヘッダー --- */
+            header {{ 
+                background: linear-gradient(135deg, #00c2ff 0%, #0078ff 100%); 
+                color: #fff; padding: 60px 20px 80px; text-align: center;
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+                border-bottom: 5px solid rgba(255,255,255,0.3);
+            }}
+            .logo-text {{ font-size: 2.8rem; font-weight: 900; letter-spacing: -1px; margin: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }}
+            .logo-sub {{ font-size: 1rem; font-weight: 700; opacity: 0.9; margin-top: 10px; }}
+
+            .container {{ max-width: 1400px; margin: -40px auto 60px; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }}
             
-            .container {{ max-width: 1400px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }}
-            .card {{ background: var(--card); border-radius: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; }}
+            /* カードデザイン */
+            .card {{ background: var(--white); border-radius: 32px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.04); transition: 0.3s; display: flex; flex-direction: column; }}
+            .card:hover {{ transform: translateY(-12px); box-shadow: 0 20px 60px rgba(0,194,255,0.15); }}
             .thumb-box {{ position: relative; aspect-ratio: 16/9; background:#000; }}
             .thumb-box img {{ width: 100%; height: 100%; object-fit: cover; }}
-            .badge {{ position: absolute; top: 15px; right: 15px; padding: 6px 12px; border-radius: 10px; font-size: 10px; font-weight: 900; color: #fff; }}
-            .badge.live {{ background: #ff0000; }}
+            .badge {{ position: absolute; top: 15px; right: 15px; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 900; color: #fff; }}
+            .badge.live {{ background: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }}
             .badge.upcoming {{ background: #ffb800; }}
+            
             .card-body {{ padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }}
-            .ch-name {{ font-size: 11px; color: var(--main); font-weight: 900; margin-bottom: 8px; }}
-            .highlight-txt {{ font-size: 1.3rem; font-weight: 900; margin-bottom: 12px; line-height: 1.2; }}
-            .quote-box {{ background: #f8fafc; padding: 12px; border-radius: 15px; font-size: 13px; border-left: 5px solid var(--main); margin-bottom: 20px; }}
-            .btn {{ display: block; text-decoration: none; text-align: center; padding: 12px; border-radius: 15px; font-weight: 900; font-size: 13px; margin-bottom: 8px; }}
+            .ch-name {{ font-size: 11px; color: var(--main); font-weight: 900; margin-bottom: 10px; }}
+            .highlight-txt {{ font-size: 1.3rem; font-weight: 900; margin-bottom: 12px; line-height: 1.3; color: #1a202c; }}
+            .quote-box {{ background: #f1f5f9; padding: 15px; border-radius: 18px; font-size: 14px; border-left: 6px solid var(--main); margin-bottom: 20px; color: #4a5568; font-weight: 700; }}
+            
+            /* ボタン */
+            .btn {{ display: block; text-decoration: none; text-align: center; padding: 15px; border-radius: 18px; font-weight: 900; font-size: 14px; margin-bottom: 10px; transition: 0.2s; }}
             .btn.watch {{ background: var(--main); color: #fff; }}
             .btn.reserve {{ background: #ffb800; color: #fff; }}
             .btn.share {{ background: #000; color: #fff; }}
-            .support-grid {{ display: flex; gap: 5px; }}
-            .s-link {{ flex: 1; text-decoration: none; font-size: 10px; font-weight: 900; text-align: center; padding: 8px 2px; border-radius: 8px; background: #f1f5f9; color: #475569; border-bottom: 3px solid #ddd; }}
+            
+            .support-grid {{ display: flex; gap: 6px; }}
+            .s-link {{ flex: 1; text-decoration: none; font-size: 10px; font-weight: 900; text-align: center; padding: 10px 2px; border-radius: 10px; background: #f1f5f9; color: #475569; border-bottom: 3px solid #cbd5e1; }}
+
+            /* --- 最下部コレクション --- */
+            .featured-footer {{ padding: 80px 20px; border-top: 1px solid #e2e8f0; }}
+            .footer-section-title {{ text-align: center; font-size: 1.5rem; font-weight: 900; margin-bottom: 40px; color: #1a202c; }}
+            .footer-scroll-container {{ overflow-x: auto; padding-bottom: 30px; scrollbar-width: none; }}
+            .footer-scroll-track {{ display: flex; gap: 30px; width: max-content; margin: 0 auto; }}
+            .item-wrap {{ transition: 0.3s; }}
+            .item-wrap:hover {{ transform: scale(1.02); }}
         </style>
     </head>
     <body>
-        <header><h1>💙 {SITE_NAME}</h1></header>
-        {FEATURE_ITEM_SECTION}
+        <header>
+            <h1 class="logo-text">💙 {SITE_NAME}</h1>
+            <p class="logo-sub">推しの素晴らしさをAIで精査し、全力で応援・支援するポータル</p>
+        </header>
+
         <div class="container">{cards_html}</div>
-        <footer style="text-align: center; padding: 60px; color: #a0aec0; font-size: 12px;">© 2026 {SITE_NAME}</footer>
+
+        {FEATURE_ITEM_SECTION if 'FEATURE_ITEM_SECTION' in locals() else FEATURED_FOOTER_HTML}
+
+        <footer style="text-align: center; padding: 40px; color: #94a3b8; font-size: 12px; font-weight: bold;">
+            © 2026 {SITE_NAME} | 推し活を、もっと楽しく。
+        </footer>
     </body>
     </html>"""
 
