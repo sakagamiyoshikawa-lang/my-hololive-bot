@@ -6,16 +6,25 @@ on:
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 保存（書き込み）を許可する設定
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # バージョンを少し上げました
+          python-version: '3.11'
       - name: Install
-        run: pip install requests google-genai # ここを最新版に変更
+        run: pip install requests google-genai
       - name: Run
         env:
           HOLODEX_API_KEY: ${{ secrets.HOLODEX_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
+      - name: Commit and Push # ここが重要！作ったサイトを保存します
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html
+          git commit -m "Update index.html with latest info" || exit 0
+          git push
