@@ -3,6 +3,7 @@ import requests
 from google import genai
 from datetime import datetime
 import urllib.parse
+import re
 import time
 
 # ==========================================
@@ -16,6 +17,12 @@ SITE_NAME = "ホロライブ応援ナビ"
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+def clean_name_logic(raw_name):
+    """プログラムでノイズを物理的に除去する (風真いろは ch. -> 風真いろは)"""
+    # ch., Ch., -, hololive, holoX などのノイズを正規表現で除去
+    name = re.sub(r'(?i)ch\.|channel|\s*-\s*.*|hololive|holoX|holoJP|holoEN|holoID', '', raw_name)
+    return name.strip()
+
 def fetch_data(endpoint, org):
     url = f"https://holodex.net/api/v2/{endpoint}"
     params = {"org": org, "limit": 40}
@@ -26,8 +33,7 @@ def fetch_data(endpoint, org):
     try:
         res = requests.get(url, params=params, headers=headers, timeout=20)
         return res.json() if res.status_code == 200 else []
-    except:
-        return []
+    except: return []
 
 def main():
     list_holo = fetch_data("live", "Hololive") + fetch_data("videos", "Hololive")
@@ -37,43 +43,36 @@ def main():
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     def create_card(v, org_tag):
-        if not v or not isinstance(v, dict) or not v.get('id'): return ""
+        if not isinstance(v, dict) or not v.get('id'): return ""
         v_id, title = v.get('id'), v.get('title', 'No Title')
         ch = v.get('channel', {})
         raw_ch_name = ch.get('name', 'Unknown')
         
-        # --- AIによる分析 (名前の抽出 + 見どころ) ---
-        clean_name = raw_ch_name # 初期値
+        # 1. まずプログラムで物理的に名前を掃除する (これが検索用)
+        base_clean_name = clean_name_logic(raw_ch_name)
+        
+        # 2. AIで見どころと「より自然な名前」を抽出
         highlight, msg = "見どころ満載の配信！", "みんなで視聴して応援しよう！"
+        display_name = base_clean_name
         
         try:
-            # 1つのプロンプトで名前の抽出と解説を同時に行い、API節約と精度向上を図る
-            prompt = f"""
-            以下のチャンネル名から『個人名』のみを抽出してください。
-            また、配信タイトルからファンが喜ぶ『見出し』と『応援文』を作ってください。
-            
-            チャンネル名: {raw_ch_name}
-            タイトル: {title}
-            
-            出力形式(区切り文字|を使用): 名前|見出し(12字以内)|応援文(20字以内)
-            例: 風真いろは|✨ 圧巻の剣戟アクション|いろは殿の努力が光る神回！
-            """
+            prompt = f"チャンネル名『{raw_ch_name}』から個人名のみ抽出して。また配信『{title}』の応援見出しと応援文を日本語で作って。形式: 名前|見出し(12字)|応援文(20字)"
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             if res.text:
                 parts = res.text.strip().split('|')
                 if len(parts) >= 3:
-                    clean_name = parts[0].strip()
+                    display_name = parts[0].strip()
                     highlight = parts[1].strip()
                     msg = parts[2].strip()
         except: pass
 
-        # 検索クエリを「個人名」のみに最適化
-        search_query = urllib.parse.quote(f"{clean_name}")
+        # 検索用には「AIの結果」よりも「プログラムで削った確実な名前」を優先（失敗防止）
+        search_query = urllib.parse.quote(base_clean_name)
         
         return f"""
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/{v_id}/mqdefault.jpg" loading="lazy">
+                <img src="https://img.youtube.com/vi/{v_id}/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Preview'">
                 <div class="org-tag">{org_tag}</div>
             </div>
             <div class="info">
@@ -83,23 +82,22 @@ def main():
                 <div class="ai-msg">💬 {msg}</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ {clean_name}さんの活動を支援 ／</div>
+                    <div class="support-text">＼ {display_name}さんの活動を支援 ／</div>
                     <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k={search_query}&tag={AMAZON_ID}" target="_blank" class="btn-sub amz">Amazonで支援</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{search_query}%2F" target="_blank" class="btn-sub rak">楽天で支援</a>
+                        <a href="https://www.amazon.co.jp/s?k={search_query}&tag={AMAZON_ID}" target="_blank" class="btn-sub amz">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{search_query}%2F" target="_blank" class="btn-sub rak">楽天市場</a>
                     </div>
                 </div>
             </div>
-        </div>
-        """
+        </div>"""
 
     def build_content(v_list, tag):
         seen, html = set(), ""
         for v in v_list:
-            if v.get('id') not in seen:
+            if isinstance(v, dict) and v.get('id') not in seen:
                 html += create_card(v, tag)
                 seen.add(v.get('id'))
-        return html if html else "<p class='error-msg'>データ更新中です。しばらくお待ちください。</p>"
+        return html if html else "<p class='error-msg'>現在ライブ・新着データがありません。更新を待っています。</p>"
 
     content_holo = build_content(list_holo, "Hololive")
     content_stars = build_content(list_stars, "Holostars")
@@ -119,18 +117,18 @@ def main():
             .motto {{ font-size: 0.85rem; color: var(--sub); margin-top: 10px; font-weight: bold; }}
             .container {{ max-width: 1200px; margin: 30px auto; padding: 0 15px; }}
             .tabs {{ display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }}
-            .tab-btn {{ padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }}
-            .tab-btn.active {{ background: var(--holo); color: #fff; box-shadow: 0 4px 12px rgba(0,194,255,0.3); }}
+            .tab-btn {{ padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; }}
+            .tab-btn.active {{ background: var(--holo); color: #fff; }}
             .grid {{ display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }}
             .grid.active {{ display: grid; }}
             .card {{ background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; }}
-            .thumb-box {{ position: relative; aspect-ratio: 16/9; background: #000; }}
+            .thumb-box {{ position: relative; aspect-ratio: 16/9; background:#000; }}
             .thumb-box img {{ width: 100%; height: 100%; object-fit: cover; }}
             .org-tag {{ position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }}
             .info {{ padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }}
             .ch-name {{ font-size: 11px; color: var(--sub); margin-bottom: 8px; }}
             .highlight {{ font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }}
-            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; line-height: 1.4; }}
+            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; }}
             .ai-msg {{ background: #f0f9ff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; border-left: 4px solid var(--holo); margin-bottom: 20px; }}
             .actions {{ margin-top: auto; padding-top: 15px; border-top: 1px solid #f1f5f9; }}
             .btn-main {{ display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 10px; font-weight: 900; margin-bottom: 15px; }}
@@ -153,7 +151,7 @@ def main():
     <body onload="tab('holo')">
         <header>
             <h1>💙 {SITE_NAME}</h1>
-            <div class="motto">推しの素晴らしさを再発見し、活動をみんなで支援するファンポータル</div>
+            <div class="motto">推しの素晴らしさを広め、みんなで活動を支援する</div>
         </header>
         <div class="container">
             <div class="tabs">
@@ -163,7 +161,7 @@ def main():
             <div id="holo" class="grid active">{content_holo}</div>
             <div id="stars" class="grid">{content_stars}</div>
         </div>
-        <footer style="text-align: center; padding: 60px; font-size: 12px; color: #94a3b8;">© 2026 {SITE_NAME} | 非公式応援プロジェクト</footer>
+        <footer style="text-align: center; padding: 60px; font-size: 12px; color: #94a3b8;">© 2026 {SITE_NAME}</footer>
     </body>
     </html>"""
 
