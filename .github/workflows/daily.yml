@@ -1,30 +1,38 @@
-name: HoloAutoUpdate
+name: Hololive Bot Update
+
 on:
   schedule:
-    - cron: '0 12 * * *'
-  workflow_dispatch:
+    # 1時間に1回実行 (UTC 0分 = 日本時間 毎時0分)
+    - cron: '0 * * * *'
+  workflow_dispatch: # 手動で実行したい時用
+
 jobs:
-  run-bot:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # 保存（書き込み）を許可する設定
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install requests google-genai
-      - name: Run
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests google-genai
+
+      - name: Run script
         env:
           HOLODEX_API_KEY: ${{ secrets.HOLODEX_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
-      - name: Commit and Push # ここが重要！作ったサイトを保存します
+
+      - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add index.html
-          git commit -m "Update index.html with latest info" || exit 0
+          git commit -m "Auto Update: $(date)" || exit 0
           git push
