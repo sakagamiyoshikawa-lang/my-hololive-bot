@@ -2,20 +2,36 @@
     <html>
     <head>
         <meta charset="utf-8">
-        <title>ホロライブ新着AI判定</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>HoloAI Tracker - 最新ホロライブ判定</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
         <style>
-            body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f0f8ff; }
-            .card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-            .category { font-weight: bold; color: #ff66b2; }
-            .ad-space { background: #eee; padding: 10px; text-align: center; margin-top: 20px; border: 1px dashed #999; }
+            :root { --primary: #33a6ff; --accent: #ff66b2; --bg: #f8fafc; }
+            body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+            .container { max-width: 1200px; margin: 0 auto; }
+            h1 { text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 30px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+            .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+            .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+            .thumb { width: 100%; height: 180px; object-fit: cover; }
+            .content { padding: 15px; }
+            .category { display: inline-block; background: var(--accent); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 10px; }
+            .title { font-weight: bold; font-size: 0.95rem; line-height: 1.4; height: 2.8em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+            .footer { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #666; }
+            .btn { text-decoration: none; color: white; background: var(--primary); padding: 5px 15px; border-radius: 5px; }
+            .ad-section { margin-top: 50px; padding: 30px; background: #fff; border-radius: 12px; text-align: center; border: 2px dashed var(--primary); }
         </style>
     </head>
     <body>
-        <h1>🌟 ホロライブ新着AI判定 (2026-01-04 03:29)</h1>
-        <p>AIが最新の動画を自動で判別しています。</p>
+        <div class="container">
+            <h1>🌟 HoloAI Tracker <span style="font-size: 1rem; color: #999;">(2026-01-04 03:34)</span></h1>
+            <div class="grid">
     
-        <div class="ad-space">
-            <p>おすすめグッズ情報などはここに追加予定</p>
+            </div>
+            <div class="ad-section">
+                <h3>📢 今週の注目アイテム</h3>
+                <p>（ここにAmazonアソシエイトなどの広告を掲載できます）</p>
+            </div>
         </div>
     </body></html>
     
