@@ -4,580 +4,661 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ホロ活ナビ</title>
+        <title>ホロ推しグッズNAVI</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
         <style>
-            body { font-family: sans-serif; background:#f8fafc; margin:0; display:flex; height:100vh; }
-            nav { width:200px; background:white; border-right:1px solid #e2e8f0; padding-top:20px; }
-            .nav-item { padding:15px 20px; cursor:pointer; color:#64748b; font-weight:bold; font-size:14px; }
-            .nav-item.active { background:#f0f9ff; color:#00b5d8; border-left:4px solid #00b5d8; }
-            main { flex:1; overflow-y:auto; padding:20px; }
-            .grid { display:none; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:20px; }
-            .grid.active { display:grid; }
+            :root { --main: #00b5d8; --sub: #ff66b2; --amz: #ff9900; --rak: #bf0000; --bg: #fdfdfd; }
+            body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: #333; margin: 0; }
+            header { background: #fff; border-bottom: 2px solid #eee; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+            h1 { margin: 0; font-size: 1.5rem; color: var(--main); font-weight: 900; }
+            .subtitle { font-size: 0.8rem; color: #666; margin-top: 5px; }
+            
+            .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+            .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+            .tab-btn { padding: 10px 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 8px; font-weight: bold; color: #666; }
+            .tab-btn.active { background: var(--main); color: #fff; border-color: var(--main); }
+
+            .shop-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+            .shop-grid.active { display: grid; }
+
+            .shop-card { background: #fff; border-radius: 15px; border: 1px solid #eee; overflow: hidden; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+            .shop-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+            
+            .image-area { position: relative; aspect-ratio: 16/9; }
+            .image-area img { width: 100%; height: 100%; object-fit: cover; }
+            .merch-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; font-size: 0.7rem; padding: 4px 10px; border-radius: 5px; font-weight: bold; }
+
+            .shop-info { padding: 20px; }
+            .liver-name { font-size: 0.85rem; font-weight: bold; color: var(--main); margin-bottom: 5px; }
+            .ai-catch { font-size: 1.1rem; font-weight: 900; color: #1a202c; margin-bottom: 10px; border-left: 4px solid var(--sub); padding-left: 10px; }
+            .v-ref { font-size: 0.75rem; color: #888; margin-bottom: 20px; line-height: 1.4; }
+
+            .shop-links { display: flex; flex-direction: column; gap: 10px; }
+            .s-btn { text-decoration: none; padding: 12px; border-radius: 10px; font-size: 0.9rem; font-weight: bold; text-align: center; color: #fff; transition: 0.2s; }
+            .amz { background: var(--amz); }
+            .rak { background: var(--rak); }
+            .watch-link { display: block; text-align: center; font-size: 0.75rem; color: #aaa; text-decoration: none; margin-top: 15px; }
+            .watch-link:hover { text-decoration: underline; }
+
+            footer { text-align: center; padding: 40px; color: #999; font-size: 0.8rem; }
         </style>
         <script>
-            function tab(id) {
-                document.querySelectorAll('.grid').forEach(g => g.style.display = 'none');
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                document.getElementById(id).style.display = 'grid';
+            function openTab(id) {
+                document.querySelectorAll('.shop-grid').forEach(g => g.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
                 document.getElementById('btn-' + id).classList.add('active');
             }
         </script>
     </head>
-    <body onload="tab('holo')">
-        <nav>
-            <div style="padding:0 20px 20px; font-size:24px; font-weight:bold; color:#00b5d8;">ホロ活ナビ</div>
-            <div id="btn-holo" class="nav-item active" onclick="tab('holo')">Hololive</div>
-            <div id="btn-stars" class="nav-item" onclick="tab('stars')">Holostars</div>
-        </nav>
-        <main>
-            <div style="font-size:12px; color:#64748b; margin-bottom:20px;">更新: 12:39</div>
-            <div id="holo" class="grid active">
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/gXV_juSCSdA/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+    <body>
+        <header>
+            <h1>💎 ホロ推しグッズNAVI</h1>
+            <div class="subtitle">AIが厳選。推しの最新限定グッズ最速ガイド</div>
+        </header>
+        <div class="container">
+            <div class="nav-tabs">
+                <button id="btn-holo" class="tab-btn active" onclick="openTab('holo')">Hololive</button>
+                <button id="btn-stars" class="tab-btn" onclick="tab('stars')">Holostars</button>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">IRyS Ch. hololive-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【Black Mesa】Maybe Black Mesa</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=gXV_juSCSdA" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20IRyS%20Ch.%20hololive-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div id="holo" class="shop-grid active">
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/gXV_juSCSdA/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
+            </div>
+            <div class="shop-info">
+                <div class="liver-name">👤 IRyS Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【Black Mesa】Maybe Black Mesa...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=IRyS%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FIRyS%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=gXV_juSCSdA" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Iroha ch. 風真いろは - holoX -</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【利用規約に同意したい】チェックボックス忘れがちですが同意します。【風真いろは/ホロライブ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=HJilD4caE8I" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Iroha%20ch.%20%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%20-%20holoX%20-&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Iroha ch. 風真いろは - holoX -</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【利用規約に同意したい】チェックボックス忘れがちですが同意し...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Iroha%20ch.%20%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%20-%20holoX%20-%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FIroha%20ch.%20%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%20-%20holoX%20-%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=HJilD4caE8I" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/H9sJ19p1APo/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/H9sJ19p1APo/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">holostars ホロスターズ - VTuber Group</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">#ホロスターズ 2026 新春 STREET FIGHTER 6 下剋上マッチ【#ホロスタ下剋上マッチ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=H9sJ19p1APo" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20holostars%20%E3%83%9B%E3%83%AD%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%BA%20-%20VTuber%20Group&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 holostars ホロスターズ - VTuber Group</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: #ホロスターズ 2026 新春 STREET FIGHTER...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=holostars%20%E3%83%9B%E3%83%AD%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%BA%20-%20VTuber%20Group%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2Fholostars%20%E3%83%9B%E3%83%AD%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%BA%20-%20VTuber%20Group%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=H9sJ19p1APo" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/9bivnHA1zgU/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/9bivnHA1zgU/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Rikka ch.律可</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【ストリートファイター6】#ホロスタ下克上マッチ 本番!!!【律可/ホロスターズ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=9bivnHA1zgU" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Rikka%20ch.%E5%BE%8B%E5%8F%AF&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Rikka ch.律可</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【ストリートファイター6】#ホロスタ下克上マッチ 本番!!!...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Rikka%20ch.%E5%BE%8B%E5%8F%AF%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRikka%20ch.%E5%BE%8B%E5%8F%AF%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=9bivnHA1zgU" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/pbQ40rkwPuU/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/l4xDXypkJD4/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Shien Ch.影山シエン</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【ストリートファイター6】下剋上マッチ本番!【影山シエン/荒咬オウガ/アルランディス/律可/岸堂天真】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=pbQ40rkwPuU" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Shien%20Ch.%E5%BD%B1%E5%B1%B1%E3%82%B7%E3%82%A8%E3%83%B3&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Aruran Ch. アルランディス</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【ストリートファイター6】ホロスタ2026新春下剋上マッチ本...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Aruran%20Ch.%20%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAruran%20Ch.%20%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=l4xDXypkJD4" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/l4xDXypkJD4/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/pbQ40rkwPuU/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Aruran Ch. アルランディス</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【ストリートファイター6】ホロスタ2026新春下剋上マッチ本番枠【アルランディス/ホロスターズ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=l4xDXypkJD4" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Aruran%20Ch.%20%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Shien Ch.影山シエン</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【ストリートファイター6】下剋上マッチ本番!【影山シエン/荒...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Shien%20Ch.%E5%BD%B1%E5%B1%B1%E3%82%B7%E3%82%A8%E3%83%B3%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShien%20Ch.%E5%BD%B1%E5%B1%B1%E3%82%B7%E3%82%A8%E3%83%B3%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=pbQ40rkwPuU" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/oKqTmUi0sV8/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/oKqTmUi0sV8/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Oga Ch.荒咬オウガ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【ストリートファイター6】#ホロスタ下剋上マッチ 本番!【荒咬オウガ /ホロスターズ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=oKqTmUi0sV8" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Oga%20Ch.%E8%8D%92%E5%92%AC%E3%82%AA%E3%82%A6%E3%82%AC&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Oga Ch.荒咬オウガ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【ストリートファイター6】#ホロスタ下剋上マッチ 本番!【荒...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Oga%20Ch.%E8%8D%92%E5%92%AC%E3%82%AA%E3%82%A6%E3%82%AC%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOga%20Ch.%E8%8D%92%E5%92%AC%E3%82%AA%E3%82%A6%E3%82%AC%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=oKqTmUi0sV8" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/VAYylwcS4bA/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/VAYylwcS4bA/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Temma Ch. 岸堂天真</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【STREET FIGHTER6】豪華お年玉をかける!下剋上マッチ本番【岸堂天真/ホロスターズ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=VAYylwcS4bA" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Temma%20Ch.%20%E5%B2%B8%E5%A0%82%E5%A4%A9%E7%9C%9F&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Temma Ch. 岸堂天真</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【STREET FIGHTER6】豪華お年玉をかける!下剋上...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Temma%20Ch.%20%E5%B2%B8%E5%A0%82%E5%A4%A9%E7%9C%9F%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTemma%20Ch.%20%E5%B2%B8%E5%A0%82%E5%A4%A9%E7%9C%9F%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=VAYylwcS4bA" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/AfYMmJ5D4JY/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/AfYMmJ5D4JY/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Luna Ch. 姫森ルーナ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【 #姫森ルーナ6周年 】リアル女子友ちゃんを呼んだので今年は2人で餅つきするのら!!!✌(・o・🍬) 告知もあり!【姫森ルーナ/ホロライブ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=AfYMmJ5D4JY" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Luna%20Ch.%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Luna Ch. 姫森ルーナ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【 #姫森ルーナ6周年 】リアル女子友ちゃんを呼んだので今年...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Luna%20Ch.%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLuna%20Ch.%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=AfYMmJ5D4JY" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/qlyfeciKGFU/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/qlyfeciKGFU/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Ayunda Risu Ch. hololive-ID</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">HAPPY NEW YEAR !!!! (UNARCHIVED KARAOKE)</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=qlyfeciKGFU" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Ayunda%20Risu%20Ch.%20hololive-ID&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Ayunda Risu Ch. hololive-ID</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: HAPPY NEW YEAR !!!! (UNARCHIVE...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Ayunda%20Risu%20Ch.%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAyunda%20Risu%20Ch.%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=qlyfeciKGFU" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Okayu Ch. 猫又おかゆ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【 🔵ロックマンX4 】完全初見でれっつご~~~~!#ゼロ編【 猫又おかゆ/ホロライブ 】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Okayu%20Ch.%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 AZKi Channel</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【新年歌枠】新年のご挨拶&歌い初め!Happy New Ye...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=AZKi%20Channel%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%20Channel%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=hJdpx_MWi-U" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Kureiji Ollie Ch. hololive-ID</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【ZOMILY - FREETALK & TAROT READING】 LET'S SEE WHAT 2026 HAS IN STORE!! 【Kureiji Ollie】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Kureiji%20Ollie%20Ch.%20hololive-ID&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Polka Ch. 尾丸ポルカ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: #2【魔法少女ノ魔女裁判】まさか、本当に人が■ぬなんて事ある...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPolka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Miko Ch. さくらみこ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【 Jump King 】21時間超え中!新年クリアしたいJump King挑戦!!!!!!!!!!!③【ホロライブ/さくらみこ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Miko%20Ch.%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Kureiji Ollie Ch. hololive-ID</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【ZOMILY - FREETALK & TAROT REA...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Kureiji%20Ollie%20Ch.%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKureiji%20Ollie%20Ch.%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/bFRJQYIV15U/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/09Vx41-0dvY/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Airani Iofifteen Channel hololive-ID</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">HAPPY NEW YEAR KKC!</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=bFRJQYIV15U" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Airani%20Iofifteen%20Channel%20hololive-ID&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Pekora Ch. 兎田ぺこら</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【2026お正月】兎田家から新年のご挨拶!告知もｱﾙﾖ!ぺこ...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Pekora%20Ch.%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPekora%20Ch.%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=09Vx41-0dvY" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/09Vx41-0dvY/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Pekora Ch. 兎田ぺこら</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【2026お正月】兎田家から新年のご挨拶!告知もｱﾙﾖ!ぺこ!【ホロライブ/兎田ぺこら/ぺこらマミー】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=09Vx41-0dvY" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Pekora%20Ch.%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Miko Ch. さくらみこ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【 Jump King 】21時間超え中!新年クリアしたいJ...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Miko%20Ch.%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMiko%20Ch.%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/bFRJQYIV15U/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Polka Ch. 尾丸ポルカ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">#2【魔法少女ノ魔女裁判】まさか、本当に人が■ぬなんて事あるの?※ネタバレあり【尾丸ポルカ/ホロライブ2】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Polka%20Ch.%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Airani Iofifteen Channel hololive-ID</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: HAPPY NEW YEAR KKC!...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Airani%20Iofifteen%20Channel%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAirani%20Iofifteen%20Channel%20hololive-ID%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=bFRJQYIV15U" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">AZKi Channel</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【新年歌枠】新年のご挨拶&歌い初め!Happy New Year 2026 Singing Stream【ホロライブ / AZKi】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=hJdpx_MWi-U" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20AZKi%20Channel&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Okayu Ch. 猫又おかゆ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【 🔵ロックマンX4 】完全初見でれっつご~~~~!#ゼロ編...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Okayu%20Ch.%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20Ch.%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/X4MIiDKm3vk/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/X4MIiDKm3vk/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Towa Ch. 常闇トワ</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【 TV同時視聴 】トワの歌が流れる⁉️ 「勇者パーティを追い出された器用貧乏」を見よう【常闇トワ/ホロライブ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=X4MIiDKm3vk" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Towa%20Ch.%20%E5%B8%B8%E9%97%87%E3%83%88%E3%83%AF&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Towa Ch. 常闇トワ</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【 TV同時視聴 】トワの歌が流れる⁉️ 「勇者パーティを追...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Towa%20Ch.%20%E5%B8%B8%E9%97%87%E3%83%88%E3%83%AF%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTowa%20Ch.%20%E5%B8%B8%E9%97%87%E3%83%88%E3%83%AF%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=X4MIiDKm3vk" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Flare Ch. 不知火フレア</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【TCG Card Shop Simulator】カドショで新年の運だめしや~!【不知火フレア/ホロライブ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Flare%20Ch.%20%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Su Ch. 水宮枢 - FLOW GLOW</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【バイオハザードRE:2】完全初見❕人生初バイオ#1【水宮枢...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Su%20Ch.%20%E6%B0%B4%E5%AE%AE%E6%9E%A2%20-%20FLOW%20GLOW%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSu%20Ch.%20%E6%B0%B4%E5%AE%AE%E6%9E%A2%20-%20FLOW%20GLOW%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Su Ch. 水宮枢 - FLOW GLOW</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【バイオハザードRE:2】完全初見❕人生初バイオ#1【水宮枢/ホロライブDEV_IS】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Su%20Ch.%20%E6%B0%B4%E5%AE%AE%E6%9E%A2%20-%20FLOW%20GLOW&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Flare Ch. 不知火フレア</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【TCG Card Shop Simulator】カドショで...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Flare%20Ch.%20%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FFlare%20Ch.%20%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Takanashi Kiara Ch. hololive-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【Pokémon LEGENDS: Z-A】what da dog doing? #kfp #キアライブ</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Takanashi%20Kiara%20Ch.%20hololive-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Takanashi Kiara Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【Pokémon LEGENDS: Z-A】what da ...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Takanashi%20Kiara%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTakanashi%20Kiara%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Elizabeth Rose Bloodflame Ch. hololive-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【MEMBERSHIP】Austin Powers: International Man of Mystery Watch-A-Long ~! 💄</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Elizabeth%20Rose%20Bloodflame%20Ch.%20hololive-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Elizabeth Rose Bloodflame Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【MEMBERSHIP】Austin Powers: Int...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Elizabeth%20Rose%20Bloodflame%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FElizabeth%20Rose%20Bloodflame%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Shiki Katagami【FIRST STAGE PRODUCTION EN】</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【PADDLE PADDLE PADDLE】Up Silly Creek with no Paddle w/ @GavisBettel【FIRST STAGE PRODUCTION EN】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=CyccXFW-f0s" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Shiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Shiki Katagami【FIRST STAGE PRODUCTION EN】</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【PADDLE PADDLE PADDLE】Up Silly...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Shiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=CyccXFW-f0s" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Machina X Flayon Ch. HOLOSTARS-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【STREET FIGHTER 6】Luke Ranking Up & How Is A Pilot's Muscle Memory..</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Machina%20X%20Flayon%20Ch.%20HOLOSTARS-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Machina X Flayon Ch. HOLOSTARS-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【STREET FIGHTER 6】Luke Ranking...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Machina%20X%20Flayon%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMachina%20X%20Flayon%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Koseki Bijou Ch. hololive-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【WARFRAME】I got addicted...</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Koseki%20Bijou%20Ch.%20hololive-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Hakos Baelz Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: ≪SHADOWVERSE: WORLDS BEYOND≫ O...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Nana Asteria Ch. アステリアなな</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">Interviewing Clifford Rolexus!!!🧐📗 #VCraftUnwrapped Episode 7</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=25u0UK3o22U" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Nana%20Asteria%20Ch.%20%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Koseki Bijou Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【WARFRAME】I got addicted......</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Izuru Ch. 奏手イヅル</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【Cover】ライカ - yamada / 奏手イヅル</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Izuru%20Ch.%20%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Nana Asteria Ch. アステリアなな</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: Interviewing Clifford Rolexus!...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Nana%20Asteria%20Ch.%20%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNana%20Asteria%20Ch.%20%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=25u0UK3o22U" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Koyori ch. 博衣こより - holoX -</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【桃鉄2】100年耐久最終回🔥西日本VS最強CPU(さくま&エンマ)~91年目から!~ #こより100年桃鉄 【博衣こより/ホロライブ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Koyori%20ch.%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%20-%20holoX%20-&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Izuru Ch. 奏手イヅル</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【Cover】ライカ - yamada / 奏手イヅル...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Izuru%20Ch.%20%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FIzuru%20Ch.%20%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">REPO|新年リベンジ戦!皆でレベル10目指す! - 夜十神封魔 × 赤髪のとも × 鬱先生 × コンプサウルス × 星宮ちょこ × 小廻こま</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Fuma%20Ch.%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%20-%20UPROAR%21%21%20-&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Koyori ch. 博衣こより - holoX -</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【桃鉄2】100年耐久最終回🔥西日本VS最強CPU(さくま&...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Koyori%20ch.%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%20-%20holoX%20-%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20ch.%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%20-%20holoX%20-%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Jurard T Rexford Ch. HOLOSTARS-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【THE CLINGY GHOST】PLAYING SHINRI'S WEIRD GIFT</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Jurard%20T%20Rexford%20Ch.%20HOLOSTARS-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 小廻こま / Komawari Koma</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【 R.E.P.O. 】あけましてれぽめとう!!【小廻こま/...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">コンプサウルス</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【R.E.P.O.】救急隊でレベル10まで行くんだよオラッ✊【コンプサウルス┆ゆにれいど!】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Jurard T Rexford Ch. HOLOSTARS-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【THE CLINGY GHOST】PLAYING SHIN...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Jurard%20T%20Rexford%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FJurard%20T%20Rexford%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">小廻こま / Komawari Koma</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【 R.E.P.O. 】あけましてれぽめとう!!【小廻こま/ミリプロ】</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%20Komawari%20Koma&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 コンプサウルス</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【R.E.P.O.】救急隊でレベル10まで行くんだよオラッ✊...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Raora Panthera Ch. hololive-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【MONSTER HUNTER WILDS】SPECIAL COLLABORATION OUTFIT REVEAL with GIGI!!!</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Raora%20Panthera%20Ch.%20hololive-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: REPO|新年リベンジ戦!皆でレベル10目指す! - 夜十神...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Fuma%20Ch.%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%20-%20UPROAR%21%21%20-%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FFuma%20Ch.%20%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%20-%20UPROAR%21%21%20-%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         
-        <div class="card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden;">
-            <div style="position:relative; aspect-ratio:16/9; background:black;">
-                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
-                <div style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.8); color:white; font-size:10px; padding:2px 6px; border-radius:4px;">👀 0</div>
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
             </div>
-            <div style="padding:15px;">
-                <div style="font-size:12px; color:#00b5d8; font-weight:bold;">Goldbullet Ch. HOLOSTARS-EN</div>
-                <div style="font-size:13px; font-weight:bold; height:3em; overflow:hidden; margin:5px 0;">【Happy 2026!】Health Update + Important things</div>
-                <div style="font-size:11px; color:#64748b; font-style:italic;">🤖 注目情報をチェック！</div>
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                    <a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" style="flex:1; background:#00b5d8; color:white; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px; font-weight:bold;">Watch</a>
-                    <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20Goldbullet%20Ch.%20HOLOSTARS-EN&tag=191383501790a-22" target="_blank" style="flex:1; background:#f1f5f9; color:#475569; text-decoration:none; font-size:10px; text-align:center; padding:8px; border-radius:6px;">Amazon</a>
+            <div class="shop-info">
+                <div class="liver-name">👤 Raora Panthera Ch. hololive-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【MONSTER HUNTER WILDS】SPECIAL ...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%20Ch.%20hololive-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
                 </div>
+                <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="watch-link">▶ 配信を視聴する</a>
+            </div>
+        </div>
+        
+        <div class="shop-card">
+            <div class="image-area">
+                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy">
+                <div class="merch-tag">おすすめ: 公式フィギュア・限定グッズ</div>
+            </div>
+            <div class="shop-info">
+                <div class="liver-name">👤 Goldbullet Ch. HOLOSTARS-EN</div>
+                <div class="ai-catch">推しの最新アイテムをチェック！</div>
+                <div class="v-ref">配信: 【Happy 2026!】Health Update + I...</div>
+                <div class="shop-links">
+                    <a href="https://www.amazon.co.jp/s?k=Goldbullet%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA&tag=191383501790a-22" target="_blank" class="s-btn amz">Amazonでお宝検索</a>
+                    <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGoldbullet%20Ch.%20HOLOSTARS-EN%20%E3%82%B0%E3%83%83%E3%82%BA%2F" target="_blank" class="s-btn rak">楽天ポイントでお得に</a>
+                </div>
+                <a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="watch-link">▶ 配信を視聴する</a>
             </div>
         </div>
         </div>
-            <div id="stars" class="grid"><p style='grid-column:1/-1; text-align:center; padding:50px;'>⚠️ Success</p></div>
-        </main>
+            <div id="stars" class="shop-grid"><p style='grid-column:1/-1;text-align:center;'>準備中...</p></div>
+        </div>
+        <footer>© 2026 ホロ推しグッズNAVI | Fan News</footer>
     </body>
     </html>
-    
