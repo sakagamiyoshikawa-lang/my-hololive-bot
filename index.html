@@ -5,13 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ホロ活ナビ</title>
     <style>
-        body { font-family: sans-serif; background:#f8fafc; color:#1e293b; margin:0; display:flex; height:100vh; overflow:hidden; }
-        nav { width:200px; background:#fff; border-right:1px solid #e2e8f0; display:flex; flex-direction:column; padding-top:20px; flex-shrink:0; }
-        .nav-item { padding:15px 20px; cursor:pointer; color:#64748b; font-weight:bold; font-size:14px; border-left:4px solid transparent; }
-        .nav-item.active { background:#f0f9ff; color:#0ea5e9; border-left-color:#0ea5e9; }
-        main { flex:1; overflow-y:auto; padding:25px; }
-        .grid { display:none; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:20px; }
-        .grid.active { display:grid; }
+        :root { --bg: #f8fafc; --side: #ffffff; --accent: #0ea5e9; --stars: #f59e0b; --txt: #1e293b; --sub: #64748b; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--txt); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        nav { width: 200px; background: var(--side); border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding-top: 20px; flex-shrink: 0; }
+        .nav-item { padding: 15px 20px; cursor: pointer; color: var(--sub); font-weight: bold; font-size: 14px; border-left: 4px solid transparent; }
+        .nav-item.active { background: #f0f9ff; color: var(--accent); border-left-color: var(--accent); }
+        main { flex: 1; overflow-y: auto; padding: 25px; }
+        .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .grid.active { display: grid; }
+        .card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; transition: 0.2s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .thumb-box { position: relative; aspect-ratio: 16/9; background: #000; }
+        .thumb { width: 100%; height: 100%; object-fit: cover; }
+        .v-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 6px; }
+        .info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .title { font-size: 14px; font-weight: bold; height: 3em; overflow: hidden; margin-bottom: 8px; }
+        .ch { font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+        .music-tag { color: #8b5cf6; font-size: 11px; font-weight: bold; margin-bottom: 5px; }
+        .ai-desc { font-size: 11px; color: var(--sub); font-style: italic; }
+        .links { display: flex; gap: 5px; margin-top: auto; padding-top: 15px; }
+        .btn { flex: 1; text-decoration: none; font-size: 10px; font-weight: bold; text-align: center; padding: 8px; border-radius: 6px; color: #475569; background: #f1f5f9; }
+        .btn-watch { background: var(--accent); color: #fff; }
     </style>
     <script>
         function tab(id) {
@@ -24,13 +38,17 @@
 </head>
 <body onload="tab('holo')">
     <nav>
-        <div style="padding:0 20px 30px; font-size:24px; font-weight:bold; color:#0ea5e9;">Navi</div>
+        <div style="padding:0 20px 30px; font-size:24px; font-weight:bold; color:var(--accent);">Navi</div>
         <div id="btn-holo" class="nav-item active" onclick="tab('holo')">Hololive TOP 50</div>
         <div id="btn-stars" class="nav-item" onclick="tab('stars')">Holostars TOP 50</div>
     </nav>
     <main>
-        <div class="grid active" id="holo"><p>Hololiveのデータがありません</p></div>
-        <div class="grid" id="stars"><p>Holostarsのデータがありません</p></div>
+        <div class="top-bar" style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:12px; color:var(--sub);">
+            <span>再生数上位ポータル (AI解析)</span>
+            <span>最終更新: 01/04 06:17</span>
+        </div>
+        <div class="grid active" id="holo"><p style='grid-column:1/-1; text-align:center; padding:50px;'>Hololiveのデータが現在取得できません。しばらく待ってから再読み込みしてください。</p></div>
+        <div class="grid" id="stars"><p style='grid-column:1/-1; text-align:center; padding:50px;'>Holostarsのデータが現在取得できません。</p></div>
     </main>
 </body>
 </html>
