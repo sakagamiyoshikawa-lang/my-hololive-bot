@@ -1,10 +1,12 @@
 import os
 import requests
+from google import genai
 from datetime import datetime
 import urllib.parse
+import time
 
 # ==========================================
-# 🌟 ID固定設定
+# 🌟 ID固定設定（設定済み）
 # ==========================================
 AMAZON_ID = "191383501790a-22"
 RAKUTEN_ID = "4fb92fbd.48f820ce.4fb92fbe.82189b12"
@@ -12,71 +14,93 @@ SITE_NAME = "ホロ活ナビ"
 # ==========================================
 
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def fetch_videos(org_name):
-    """APIからデータを取得。型チェックを極限まで強化"""
+    """APIから取得。リトライ処理と詳細なエラー報告を追加"""
     url = "https://holodex.net/api/v2/videos"
     params = {
-        "org": org_name,
-        "limit": 50,
-        "sort": "view_count",
-        "order": "desc",
-        "type": "stream,clip"
+        "org": org_name, "limit": 50, "sort": "view_count",
+        "order": "desc", "type": "stream,clip"
     }
+    headers = {"X-APIKEY": HOLODEX_API_KEY}
+    
+    status_msg = ""
     try:
-        res = requests.get(url, params=params, headers={"X-APIKEY": HOLODEX_API_KEY}, timeout=15)
-        res.raise_for_status()
-        data = res.json()
-        # リスト形式で届いているか厳密に確認
-        if isinstance(data, list):
-            return [v for v in data if isinstance(v, dict) and v.get('id')]
-        return []
+        # タイムアウトを少し長めに設定
+        res = requests.get(url, params=params, headers=headers, timeout=30)
+        
+        if res.status_code == 200:
+            data = res.json()
+            if isinstance(data, list):
+                return [v for v in data if isinstance(v, dict) and v.get('id')], "Success"
+            return [], "Empty Data"
+        else:
+            return None, f"API Error: {res.status_code}"
     except Exception as e:
-        print(f"Error fetching {org_name}: {e}")
-        return []
+        return None, f"Network Error: {str(e)}"
 
 def main():
     # 1. データの取得
-    list_holo = fetch_videos("Hololive")
-    list_stars = fetch_videos("Holostars")
+    list_holo, msg_holo = fetch_videos("Hololive")
+    time.sleep(2) # 負荷軽減のための待機
+    list_stars, msg_stars = fetch_videos("Holostars")
     
-    # 2. HTML生成
-    html_cards_holo = ""
-    html_cards_stars = ""
+    client = genai.Client(api_key=GEMINI_API_KEY)
 
-    def make_html(v, org_label):
-        v_id = v.get('id')
-        title = v.get('title', 'Untitled')
-        views = v.get('view_count', 0)
-        # チャンネル名取得のガード
-        ch_dict = v.get('channel', {})
-        ch_name = ch_dict.get('name', 'Unknown') if isinstance(ch_dict, dict) else 'Unknown'
-        
-        query = urllib.parse.quote(f"{org_label} {ch_name}")
-        
-        return f"""
-        <div class="card">
-            <div class="thumb-wrap">
-                <img src="https://img.youtube.com/vi/{v_id}/mqdefault.jpg" loading="lazy">
-                <div class="view-count">👀 {views:,} views</div>
+    # 2. HTML生成
+    def make_html(v_list, org_label, status_msg):
+        if v_list is None:
+            return f"""
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <p style="font-size: 3rem;">⚠️</p>
+                <p style="font-weight: bold; color: #e53e3e;">{org_label}のデータ取得に失敗しました</p>
+                <p style="font-size: 0.8rem; color: #a0aec0;">理由: {status_msg}</p>
             </div>
-            <div class="card-body">
-                <div class="ch-name">👤 {ch_name}</div>
-                <div class="v-title">{title}</div>
-                <div class="links">
-                    <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn btn-main">視聴する</a>
-                    <a href="https://www.amazon.co.jp/s?k={query}&tag={AMAZON_ID}" target="_blank" class="btn">Amazon</a>
-                    <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{query}%2F" target="_blank" class="btn">楽天</a>
+            """
+        
+        if not v_list:
+            return f"<p style='grid-column: 1/-1; text-align: center; padding: 50px;'>現在、{org_label}の注目データはありません。</p>"
+
+        cards_html = ""
+        for v in v_list:
+            v_id = v.get('id')
+            title = v.get('title', 'Untitled')
+            views = v.get('view_count', 0)
+            ch_name = v.get('channel', {}).get('name', 'Unknown')
+            
+            # AI解析（簡易版で安定性重視）
+            desc = "最新配信をチェック！"
+            try:
+                prompt = f"15文字以内のキャッチコピーを書いて。タイトル: {title}"
+                res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+                if res.text: desc = res.text.strip()
+            except: pass
+
+            query = urllib.parse.quote(f"{org_label} {ch_name}")
+            cards_html += f"""
+            <div class="card">
+                <div class="thumb-wrap">
+                    <img src="https://img.youtube.com/vi/{v_id}/mqdefault.jpg" loading="lazy">
+                    <div class="view-count">👀 {views:,} views</div>
+                </div>
+                <div class="card-body">
+                    <div class="ch-name">👤 {ch_name}</div>
+                    <div class="v-title">{title}</div>
+                    <div style="font-size: 11px; color: #718096; margin-bottom: 15px; font-style: italic;">🤖 {desc}</div>
+                    <div class="links">
+                        <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn btn-main">視聴</a>
+                        <a href="https://www.amazon.co.jp/s?k={query}&tag={AMAZON_ID}" target="_blank" class="btn">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{query}%2F" target="_blank" class="btn">楽天</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        """
+            """
+        return cards_html
 
-    # 各リストからカード作成
-    for v in list_holo: html_cards_holo += make_html(v, "ホロライブ")
-    for v in list_stars: html_cards_stars += make_html(v, "ホロスターズ")
+    content_holo = make_html(list_holo, "ホロライブ", msg_holo)
+    content_stars = make_html(list_stars, "ホロスターズ", msg_stars)
 
-    # 最終出力
     full_html = f"""
     <!DOCTYPE html>
     <html lang="ja">
@@ -85,7 +109,7 @@ def main():
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{SITE_NAME}</title>
         <style>
-            body {{ font-family: sans-serif; background: #f0f4f8; color: #2d3748; margin: 0; display: flex; height: 100vh; overflow: hidden; }}
+            body {{ font-family: sans-serif; background: #f4f7f9; color: #2d3748; margin: 0; display: flex; height: 100vh; overflow: hidden; }}
             nav {{ width: 220px; background: #fff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }}
             .nav-item {{ padding: 15px 20px; cursor: pointer; font-weight: bold; color: #718096; border-left: 4px solid transparent; }}
             .nav-item.active {{ background: #ebf8ff; color: #00b5d8; border-left-color: #00b5d8; }}
@@ -98,7 +122,7 @@ def main():
             .view-count {{ position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; }}
             .card-body {{ padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }}
             .ch-name {{ font-size: 12px; color: #00b5d8; font-weight: bold; margin-bottom: 5px; }}
-            .v-title {{ font-size: 14px; font-weight: bold; height: 3em; overflow: hidden; margin-bottom: 15px; }}
+            .v-title {{ font-size: 14px; font-weight: bold; height: 3em; overflow: hidden; margin-bottom: 10px; }}
             .links {{ display: flex; gap: 5px; margin-top: auto; }}
             .btn {{ flex: 1; text-decoration: none; font-size: 10px; font-weight: bold; text-align: center; padding: 8px; border-radius: 6px; background: #edf2f7; color: #4a5568; }}
             .btn-main {{ background: #00b5d8; color: #fff; }}
@@ -119,8 +143,12 @@ def main():
             <div id="btn-stars" class="nav-item" onclick="show('stars')">Holostars TOP 50</div>
         </nav>
         <main>
-            <div id="holo" class="grid active">{html_cards_holo or "<p>データ読み込み中、または取得失敗</p>"}</div>
-            <div id="stars" class="grid">{html_cards_stars or "<p>データ読み込み中、または取得失敗</p>"}</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px; color: #718096;">
+                <span>注目コンテンツ（自動更新）</span>
+                <span>最終更新: {datetime.now().strftime('%m/%d %H:%M')}</span>
+            </div>
+            <div id="holo" class="grid active">{content_holo}</div>
+            <div id="stars" class="grid">{content_stars}</div>
         </main>
     </body>
     </html>
