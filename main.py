@@ -1,13 +1,12 @@
 import os
 import requests
-import google.generativeai as genai
+from google import genai # 書き方を最新版に変更
 
-# 金庫から鍵を取り出す設定
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def main():
-    # 1. Holodexから最新動画を取得
+    # 1. Holodexからデータ取得
     url = "https://holodex.net/api/v2/videos"
     params = {"org": "Hololive", "limit": 5, "sort": "published_at", "order": "desc", "type": "placeholder,stream"}
     headers = {"X-APIKEY": HOLODEX_API_KEY}
@@ -16,17 +15,22 @@ def main():
     response = requests.get(url, params=params, headers=headers)
     videos = response.json()
 
-    # Geminiの設定
-    genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # 2. 最新のGemini設定
+    client = genai.Client(api_key=GEMINI_API_KEY)
 
-    print("🤖 AI判定を開始します...\n")
+    print("🤖 最新版AI判定を開始します...\n")
     for v in videos:
         title = v['title']
         prompt = f"以下の動画タイトルを[Original Song, Cover Song, Singing Stream, Other]から1つ選んで出力して。解説は不要。\nタイトル: {title}"
-        result = model.generate_content(prompt)
+        
+        # 最新の呼び出し方式に変更
+        response = client.models.generate_content(
+            model='gemini-1.5-flash',
+            contents=prompt
+        )
+        
         print(f"タイトル: {title}")
-        print(f"AI判定  : {result.text.strip()}")
+        print(f"AI判定  : {response.text.strip()}")
         print("-" * 20)
 
 if __name__ == "__main__":
