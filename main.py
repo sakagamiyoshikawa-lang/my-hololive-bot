@@ -17,9 +17,23 @@ SITE_NAME = "ホロライブ応援ナビ"
 HOLODEX_API_KEY = os.getenv("HOLODEX_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-def clean_name_basic(raw_name):
-    """物理的なノイズ除去 (ch. や所属名)"""
-    name = re.sub(r'(?i)ch\.|channel|\s*-\s*.*|hololive|holoX|holoJP|holoEN|holoID', '', raw_name)
+def super_clean_name(raw_name):
+    """
+    プログラム側で強制的に名前を一本化するロジック
+    """
+    # 1. ch. や hololive などの共通ノイズを消去
+    name = re.sub(r'(?i)ch\.|channel|\s*-\s*.*|hololive|holoX|holoJP|holoEN|holoID', '', raw_name).strip()
+    
+    # 2. 日本語（漢字・ひらがな・カタカナ）が含まれているかチェック
+    has_japanese = re.search(r'[ぁ-んァ-ヶー一-龠]', name)
+    
+    if has_japanese:
+        # 日本語がある場合、英数字をすべて消して日本語だけ残す（例: Iroha 風真いろは -> 風真いろは）
+        name = re.sub(r'[a-zA-Z0-9\s]+', '', name)
+    else:
+        # 英語のみの場合、連続するスペースを1つにする
+        name = re.sub(r'\s+', ' ', name)
+    
     return name.strip()
 
 def fetch_data(endpoint, org):
@@ -46,41 +60,22 @@ def main():
         ch = v.get('channel', {})
         raw_ch_name = ch.get('name', 'Unknown')
         
-        # 1. デフォルトの名前
-        clean_name = clean_name_basic(raw_ch_name)
+        # --- 1. プログラムで強制クレンジング (絶対に混ぜない) ---
+        final_search_term = super_clean_name(raw_ch_name)
         
-        # 2. AIによる「最強の検索ワード」の選定
-        highlight, msg = "見どころ満載の配信！", "みんなで視聴して応援しよう！"
-        search_term = clean_name # 検索用の最終ワード
-        
+        # --- 2. AIで見どころだけを作る (名前は1の結果を使う) ---
+        highlight, msg = "配信をチェック！", "みんなで視聴して応援しよう！"
         try:
-            # プロンプトを強化：混合を禁じ、単一言語の正式名称を1つだけ選ばせる
-            prompt = f"""
-            以下のチャンネル名から、Amazonや楽天でグッズを検索するのに最も適した「個人名」を1つだけ選んでください。
-            
-            【重要ルール】
-            - JPメンバーなら日本語の名前1つだけ（例：風真いろは）。英語を混ぜない。
-            - EN/IDメンバーなら英語の名前1つだけ（例：Gawr Gura）。
-            - 余計な「ch.」「-」は一切含めない。
-            
-            また、配信タイトルから応援見出しと文を作ってください。
-            
-            チャンネル名: {raw_ch_name}
-            タイトル: {title}
-            
-            形式: 検索名|見出し|応援文
-            """
+            prompt = f"配信タイトル『{title}』から、ファンの期待を高める『短い見出し』と『応援文』を日本語で作って。形式: 見出し(12字)|応援文(20字)"
             res = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
             if res.text:
                 parts = res.text.strip().split('|')
-                if len(parts) >= 3:
-                    search_term = parts[0].strip()
-                    highlight = parts[1].strip()
-                    msg = parts[2].strip()
+                highlight = parts[0].strip()
+                msg = parts[1].strip() if len(parts) > 1 else msg
         except: pass
 
         # 検索キーワードをURLエンコード
-        encoded_query = urllib.parse.quote(search_term)
+        encoded_query = urllib.parse.quote(final_search_term)
         
         return f"""
         <div class="card">
@@ -95,7 +90,7 @@ def main():
                 <div class="ai-msg">💬 {msg}</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v={v_id}" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ {search_term}さんの活動を支援 ／</div>
+                    <div class="support-text">＼ {final_search_term}さんの活動を支援 ／</div>
                     <div class="merch-links">
                         <a href="https://www.amazon.co.jp/s?k={encoded_query}&tag={AMAZON_ID}" target="_blank" class="btn-sub amz">Amazon</a>
                         <a href="https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F{encoded_query}%2F" target="_blank" class="btn-sub rak">楽天市場</a>
@@ -112,6 +107,7 @@ def main():
                 seen.add(v.get('id'))
         return html if html else "<p class='error-msg'>データ更新中です。</p>"
 
+    # HTML出力 (中身は変わらないので省略してもOKですが、念のため統合します)
     content_holo = build_content(list_holo, "Hololive")
     content_stars = build_content(list_stars, "Holostars")
 
@@ -140,7 +136,7 @@ def main():
             .info {{ padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }}
             .ch-name {{ font-size: 11px; color: var(--sub); margin-bottom: 8px; }}
             .highlight {{ font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }}
-            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; }}
+            .v-title {{ font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; line-height: 1.4; }}
             .ai-msg {{ background: #f0f9ff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; border-left: 4px solid var(--holo); margin-bottom: 20px; }}
             .actions {{ margin-top: auto; padding-top: 15px; border-top: 1px solid #f1f5f9; }}
             .btn-main {{ display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 10px; font-weight: 900; margin-bottom: 15px; }}
@@ -155,7 +151,7 @@ def main():
             function tab(id) {{
                 document.querySelectorAll('.grid').forEach(g => g.style.display = 'none');
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.getElementById(id).style.display = 'grid';
+                document.getElementById(id).classList.add('active');
                 document.getElementById('btn-' + id).classList.add('active');
             }}
         </script>
@@ -163,7 +159,7 @@ def main():
     <body onload="tab('holo')">
         <header>
             <h1>💙 {SITE_NAME}</h1>
-            <div class="motto">推しの素晴らしさを広め、活動をみんなで支援するファンポータル</div>
+            <div class="motto">推しの素晴らしさを再発見し、活動をみんなで支援するファンポータル</div>
         </header>
         <div class="container">
             <div class="tabs">
