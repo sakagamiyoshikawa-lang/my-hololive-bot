@@ -5,33 +5,54 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ホロライブ応援ナビ</title>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
         <style>
-            :root { --holo: #00c2ff; --bg: #f8fafc; --text: #1e293b; --sub: #64748b; }
-            body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; }
-            header { background: #fff; padding: 40px 20px; text-align: center; border-bottom: 3px solid var(--holo); }
-            h1 { margin: 0; font-size: 1.8rem; color: var(--holo); font-weight: 900; }
-            .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
-            .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-            .tab-btn { padding: 12px 25px; border: none; background: #fff; border-radius: 50px; font-weight: 900; color: var(--sub); cursor: pointer; }
-            .tab-btn.active { background: var(--holo); color: #fff; }
-            .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+            :root { --holo: #00c2ff; --stars: #ffb800; --bg: #f0f4f8; --card: #ffffff; --txt: #2d3748; }
+            body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); color: var(--txt); margin: 0; }
+            
+            header { background: linear-gradient(135deg, var(--holo), #0077ff); color: white; padding: 60px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+            header h1 { margin: 0; font-size: 2.5rem; font-weight: 900; letter-spacing: 2px; text-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+            header p { opacity: 0.9; font-weight: bold; margin-top: 10px; }
+
+            .container { max-width: 1300px; margin: -40px auto 40px; padding: 0 20px; }
+            .nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+            .nav-btn { padding: 15px 40px; border: none; background: white; border-radius: 50px; font-weight: 900; color: #718096; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; }
+            .nav-btn.active { background: var(--holo); color: white; transform: scale(1.05); }
+
+            .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
             .grid.active { display: grid; }
-            .card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
-            .thumb-box { position: relative; aspect-ratio: 16/9; background:#000; }
+
+            .card { background: var(--card); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; }
+            .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+            
+            .thumb-box { position: relative; aspect-ratio: 16/9; }
             .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
-            .org-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }
-            .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-            .highlight { font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }
-            .v-title { font-size: 13px; color: var(--sub); height: 2.8em; overflow: hidden; margin-bottom: 15px; line-height: 1.4; }
-            .ai-msg { background: #f0f9ff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; border-left: 4px solid var(--holo); margin-bottom: 20px; }
-            .btn-main { display: block; text-decoration: none; background: var(--holo); color: #fff; text-align: center; padding: 12px; border-radius: 10px; font-weight: 900; margin-bottom: 15px; }
-            .merch-links { display: flex; gap: 5px; }
-            .btn-sub { flex: 1; text-decoration: none; background: #f8fafc; color: var(--sub); text-align: center; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: bold; border: 1px solid #e2e8f0; }
+            .badge { position: absolute; top: 15px; right: 15px; background: #ff0000; color: white; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; animation: pulse 1.5s infinite; }
+            @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+            .org-tag { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; padding: 5px 12px; border-radius: 8px; font-size: 10px; font-weight: bold; }
+
+            .info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+            .ch-name { font-size: 12px; color: var(--holo); font-weight: 900; margin-bottom: 10px; }
+            .highlight { font-size: 1.3rem; font-weight: 900; line-height: 1.3; margin-bottom: 10px; }
+            .ai-msg { font-size: 14px; color: #4a5568; line-height: 1.5; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 15px; border-left: 5px solid var(--holo); }
+
+            .actions { margin-top: auto; }
+            .btn-main { display: block; text-decoration: none; background: var(--holo); color: white; text-align: center; padding: 15px; border-radius: 15px; font-weight: 900; margin-bottom: 10px; transition: 0.2s; }
+            .btn-share { display: block; text-decoration: none; background: #000; color: white; text-align: center; padding: 12px; border-radius: 15px; font-size: 13px; font-weight: bold; margin-bottom: 20px; }
+            
+            .support-section { border-top: 2px dashed #edf2f7; padding-top: 20px; }
+            .section-title { font-size: 11px; text-align: center; color: #a0aec0; font-weight: bold; margin-bottom: 12px; }
+            .support-grid { display: flex; gap: 8px; }
+            .s-link { flex: 1; text-decoration: none; text-align: center; padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: bold; background: #f1f5f9; color: #4a5568; }
+            .s-link.amz { border-bottom: 3px solid #ff9900; }
+            .s-link.rak { border-bottom: 3px solid #bf0000; }
+
+            footer { text-align: center; padding: 80px 20px; color: #a0aec0; font-size: 14px; }
         </style>
         <script>
             function tab(id) {
                 document.querySelectorAll('.grid').forEach(g => g.classList.remove('active'));
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 document.getElementById('btn-' + id).classList.add('active');
             }
@@ -40,1196 +61,799 @@
     <body onload="tab('holo')">
         <header>
             <h1>💙 ホロライブ応援ナビ</h1>
-            <div style="font-size: 0.85rem; color: var(--sub); margin-top: 10px; font-weight: bold;">推しの素晴らしさを再発見し、活動を支援するファンポータル</div>
+            <p>AIが魅力を精査。推しを広め、活動を支える応援ポータル</p>
         </header>
         <div class="container">
-            <div class="tabs">
-                <button id="btn-holo" class="tab-btn active" onclick="tab('holo')">Hololive</button>
-                <button id="btn-stars" class="tab-btn" onclick="tab('stars')">Holostars</button>
+            <div class="nav">
+                <button id="btn-holo" class="nav-btn active" onclick="tab('holo')">Hololive</button>
+                <button id="btn-stars" class="nav-btn" onclick="tab('stars')">Holostars</button>
             </div>
             <div id="holo" class="grid active">
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/HJilD4caE8I/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Iroha ch. 風真いろは - holoX -</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【利用規約に同意したい】チェックボックス忘れがちですが同意します。【風真いろは/ホロライブ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=HJilD4caE8I" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 風真いろはさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=HJilD4caE8I" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC_vMYWcDjmfdpH6r4TTn1MQ/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/vSzgA6-L3LQ/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Okayu Ch. 猫又おかゆ</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【 🔵ロックマンX4 】完全初見でれっつご~~~~!#ゼロ編【 猫又おかゆ/ホロライブ 】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 猫又おかゆさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=vSzgA6-L3LQ" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCvaTdHTWBGv3MKj3KVqJVCw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/hJdpx_MWi-U/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 AZKi Channel</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【新年歌枠】新年のご挨拶&歌い初め!Happy New Year 2026 Singing Stream【ホロライブ / AZKi】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=hJdpx_MWi-U" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ AZKiさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=hJdpx_MWi-U" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23AZKi&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC0TXe_LYZ4scaW2XMyi5_kw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/rLzqSh8vJag/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Kureiji Ollie Ch. hololive-ID</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【ZOMILY - FREETALK & TAROT READING】 LET'S SEE WHAT 2026 HAS IN STORE!! 【Kureiji Ollie】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Kureiji Ollieさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Kureiji%20Ollie&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKureiji%20Ollie%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=rLzqSh8vJag" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kureiji%20Ollie&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCYz_5n-uDuChHtLo7My1HnQ/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Kureiji%20Ollie&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKureiji%20Ollie%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/2EyPeBvqgnY/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Polka Ch. 尾丸ポルカ</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">#2【魔法少女ノ魔女裁判】まさか、本当に人が■ぬなんて事あるの?※ネタバレあり【尾丸ポルカ/ホロライブ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 尾丸ポルカさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=2EyPeBvqgnY" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCK9V2B22uJYu3N7eR_BT9QA/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/5_gfrvow5FY/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Miko Ch. さくらみこ</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【 Jump King 】21時間超え中!新年クリアしたいJump King挑戦!!!!!!!!!!!③【ホロライブ/さくらみこ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ さくらみこさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=5_gfrvow5FY" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC-hM6YJuNYVAmUWxeIr9FeA/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/QS1dpgQkBu8/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Flare Ch. 不知火フレア</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【TCG Card Shop Simulator】カドショで新年の運だめしや~!【不知火フレア/ホロライブ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 不知火フレアさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=QS1dpgQkBu8" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCvInZx9h3jC2JzsIzoOebWg/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E4%B8%8D%E7%9F%A5%E7%81%AB%E3%83%95%E3%83%AC%E3%82%A2%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/oQT7EsfaiX4/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Su Ch. 水宮枢 - FLOW GLOW</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【バイオハザードRE:2】完全初見❕人生初バイオ#1【水宮枢/ホロライブDEV_IS】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 水宮枢さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E6%B0%B4%E5%AE%AE%E6%9E%A2&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E6%B0%B4%E5%AE%AE%E6%9E%A2%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=oQT7EsfaiX4" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E6%B0%B4%E5%AE%AE%E6%9E%A2&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCjk2nKmHzgH5Xy-C5qYRd5A/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E6%B0%B4%E5%AE%AE%E6%9E%A2&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E6%B0%B4%E5%AE%AE%E6%9E%A2%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/krYPklnl0CI/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Riona Ch. 響咲リオナ - FLOW GLOW</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【TCG Card Shop Simulator 】初めてのカドショ!豪運リオナみせられるかな!??【ホロライブ DEV_IS 響咲リオナ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=krYPklnl0CI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 響咲リオナさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=krYPklnl0CI" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC9LSiN9hXI55svYEBrrK-tw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E9%9F%BF%E5%92%B2%E3%83%AA%E3%82%AA%E3%83%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/VafDiF5Kqt0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/VafDiF5Kqt0/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【雑談/CHAT】お正月衣装をみせびらかす【#輪堂千速 / #hololivedev_is  #FLOWGLOW 】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=VafDiF5Kqt0" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 輪堂 千速さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=VafDiF5Kqt0" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCKMWFR6lAstLa7Vbf5dH7ig/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E8%BC%AA%E5%A0%82%E5%8D%83%E9%80%9F%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/xm4BabKGL3s/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Takanashi Kiara Ch. hololive-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【Pokémon LEGENDS: Z-A】what da dog doing? #kfp #キアライブ</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Takanashi Kiaraさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Takanashi%20Kiara&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTakanashi%20Kiara%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=xm4BabKGL3s" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Takanashi%20Kiara&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCHsx4Hqa-1ORjQTh9TYDhww/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Takanashi%20Kiara&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTakanashi%20Kiara%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/8jrxoUMXjmw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/8jrxoUMXjmw/mqdefault.jpg" loading="lazy">
+                <span class="badge live">LIVE</span>
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Roboco Ch. - ロボ子</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【 縦型/歌枠】NO16💜新年一発目の歌枠じゃ~~✨今年も 楽しく歌おおお✨🎤ろぼめろでぃ~ Midnight RBmelody  🎶 【ホロライブ/ ロボ子さん #ろぼめろでぃ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=8jrxoUMXjmw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Robocoさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=8jrxoUMXjmw" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Roboco&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCDqI2jOz0weumE8s7paEk6g/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/JIjGkoftDWs/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Elizabeth Rose Bloodflame Ch. hololive-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【MEMBERSHIP】Austin Powers: International Man of Mystery Watch-A-Long ~! 💄</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Elizabeth Rose Bloodflameさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Elizabeth%20Rose%20Bloodflame&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FElizabeth%20Rose%20Bloodflame%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=JIjGkoftDWs" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Elizabeth%20Rose%20Bloodflame&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCW5uhrG1eCBYditmhL0Ykjw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Elizabeth%20Rose%20Bloodflame&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FElizabeth%20Rose%20Bloodflame%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/CyccXFW-f0s/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Shiki Katagami【FIRST STAGE PRODUCTION EN】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【PADDLE PADDLE PADDLE】Up Silly Creek with no Paddle w/ @GavisBettel【FIRST STAGE PRODUCTION EN】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=CyccXFW-f0s" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Shiki Katagami【FIRST STAGE PRODUCTION EN】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Shiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=CyccXFW-f0s" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Shiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCVEvMzXlpobF6hhfwfAYKJg/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Shiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiki%20Katagami%E3%80%90FIRST%20STAGE%20PRODUCTION%20EN%E3%80%91%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/R1enqNSuqAc/mqdefault.jpg" loading="lazy">
+                
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Mio Channel 大神ミオ</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=R1enqNSuqAc" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCp-5t9SrOQwXMU7iIjQfARg/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/lidyA7qmZHI/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Machina X Flayon Ch. HOLOSTARS-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【STREET FIGHTER 6】Luke Ranking Up & How Is A Pilot's Muscle Memory..</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Machina X Flayon  HOLOSTARSさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Machina%20X%20Flayon%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMachina%20X%20Flayon%20%20HOLOSTARS%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=lidyA7qmZHI" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Machina%20X%20Flayon%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC060r4zABV18vcahAWR1n7w/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Machina%20X%20Flayon%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMachina%20X%20Flayon%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/Yb9ZxwniRxQ/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Koseki Bijou Ch. hololive-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【WARFRAME】I got addicted...</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Koseki Bijouさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=Yb9ZxwniRxQ" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koseki%20Bijou&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC9p_lqQ0FEDz327Vgf5JwqA/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/tIVp-NRUtG0/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Hakos Baelz Ch. hololive-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">≪SHADOWVERSE: WORLDS BEYOND≫ Oh Sweet Rival w/ @holoen_gigimurin #sponsored</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Hakos Baelzさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=tIVp-NRUtG0" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Hakos%20Baelz&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCgmPnx-EEeOrZSg5Tiw7ZRQ/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/25u0UK3o22U/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Nana Asteria Ch. アステリアなな</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Interviewing Clifford Rolexus!!!🧐📗 #VCraftUnwrapped Episode 7</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=25u0UK3o22U" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ アステリアななさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=25u0UK3o22U" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCJwnGUjoniJA3It-P2snc-A/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%82%B9%E3%83%86%E3%83%AA%E3%82%A2%E3%81%AA%E3%81%AA%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/WjqQuU2nrpw/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Aruran Ch. アルランディス</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【ゼルダの伝説 風のタクト】ついに手に入れたSwitc2で懐かしのゲームやるしかない【アルランディス/ホロスターズ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=WjqQuU2nrpw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ アルランディスさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=WjqQuU2nrpw" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCKeAhJvy8zgXWbh9duVjIaQ/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%83%AB%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B9%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/uA7cNVWU5bk/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/uA7cNVWU5bk/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Matsuri Channel 夏色まつり</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【新年】目標たてたり!【ホロライブ/夏色まつり】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 夏色まつりさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=uA7cNVWU5bk" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCQ0UDLQCjY0rmuxCDE38FGg/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%8F%E8%89%B2%E3%81%BE%E3%81%A4%E3%82%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/Khs_u0v7Jiw/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Izuru Ch. 奏手イヅル</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【Cover】ライカ - yamada / 奏手イヅル</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 奏手イヅルさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=Khs_u0v7Jiw" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCZgOv3YDEs-ZnZWDYVwJdmA/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A5%8F%E6%89%8B%E3%82%A4%E3%83%85%E3%83%AB%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Koyori ch. 博衣こより - holoX -</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【桃鉄2】100年耐久最終回🔥西日本VS最強CPU(さくま&エンマ)~91年目から!~ #こより100年桃鉄 【博衣こより/ホロライブ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 博衣こよりさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC6eWCld0KwmyHFbAqK3V-Rw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Jurard T Rexford Ch. HOLOSTARS-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【THE CLINGY GHOST】PLAYING SHINRI'S WEIRD GIFT</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Jurard T Rexford  HOLOSTARSさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Jurard%20T%20Rexford%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FJurard%20T%20Rexford%20%20HOLOSTARS%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">REPO|新年リベンジ戦!皆でレベル10目指す! - 夜十神封魔 × 赤髪のとも × 鬱先生 × コンプサウルス × 星宮ちょこ × 小廻こま</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 夜十神封魔さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Pekora Ch. 兎田ぺこら</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【モンスト】ぺこ!【ホロライブ/兎田ぺこら】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=07ndF1p8o30" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 兎田ぺこらさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 小廻こま / Komawari Koma</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【 R.E.P.O. 】あけましてれぽめとう!!【小廻こま/ミリプロ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 小廻こま /さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%20/%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/NnmWYRZgaL8/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 コンプサウルス</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【R.E.P.O.】救急隊でレベル10まで行くんだよオラッ✊【コンプサウルス┆ゆにれいど!】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ コンプサウルスさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=NnmWYRZgaL8" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCkYQc5CYxYyyMrn0i-uQyXw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%B3%E3%83%B3%E3%83%97%E3%82%B5%E3%82%A6%E3%83%AB%E3%82%B9%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/2axhG15RN4Y/mqdefault.jpg" loading="lazy">
+                
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Jurard T Rexford Ch. HOLOSTARS-EN</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=2axhG15RN4Y" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Jurard%20T%20Rexford%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCTVSOgYuSWmNAt-lnJPkEEw/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Jurard%20T%20Rexford%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FJurard%20T%20Rexford%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/0B2a86CbZ0E/mqdefault.jpg" loading="lazy">
+                
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Fuma Ch. 夜十神封魔 - UPROAR!! -</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=0B2a86CbZ0E" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCc88OV45ICgHbn3ZqLLb52w/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%9C%E5%8D%81%E7%A5%9E%E5%B0%81%E9%AD%94%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/07ndF1p8o30/mqdefault.jpg" loading="lazy">
+                
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 Pekora Ch. 兎田ぺこら</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=07ndF1p8o30" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC1DCedRgGHBdm81E1llLhOQ/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/UqYKiWpQWMI/mqdefault.jpg" loading="lazy">
+                
+                <div class="org-tag">Hololive</div>
+            </div>
+            <div class="info">
+                <div class="ch-name">👤 小廻こま / Komawari Koma</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=UqYKiWpQWMI" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UC_upTZ0otpptV5KARBsnIPg/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%B0%8F%E5%BB%BB%E3%81%93%E3%81%BE%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Raora Panthera Ch. hololive-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【MONSTER HUNTER WILDS】SPECIAL COLLABORATION OUTFIT REVEAL with GIGI!!!</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Raora Pantheraさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raora%20Panthera&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCl69AEx4MdqMZH7Jtsm7Tig/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
+                <img src="https://img.youtube.com/vi/kpSY8G2lu1Y/mqdefault.jpg" loading="lazy">
+                
                 <div class="org-tag">Hololive</div>
             </div>
             <div class="info">
                 <div class="ch-name">👤 Goldbullet Ch. HOLOSTARS-EN</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【Happy 2026!】Health Update + Important things</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
+                <div class="highlight">必見の配信！</div>
+                <div class="ai-msg">💬 みんなで応援しましょう！</div>
+                
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Goldbullet  HOLOSTARSさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Goldbullet%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGoldbullet%20%20HOLOSTARS%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2ADZFr4Z8U0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 あてぃしの!【切り抜きちゃんねる】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">同意できなくて台パンしたり雄叫びを上げたりウニの集合体を作ったりしてブチギレるねねち #shorts #ホロライブ #切り抜き #vtuber #桃鈴ねね #ホロ切り抜き</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=2ADZFr4Z8U0" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ あてぃしの!【切り抜きちゃんねる】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%82%E3%81%A6%E3%81%83%E3%81%97%E3%81%AE%21%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%82%E3%81%A6%E3%81%83%E3%81%97%E3%81%AE%21%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/VMusmqJezeg/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロライ部【ホロライブ切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">ぺこらとマミー2人の手で親子クリームパンを拾うしよとしたらマミーの手が小さすぎて肉厚クリームパンと言われてしまうぺこら【ホロライブ切り抜き/兎田ぺこら/ぺこらマミー】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=VMusmqJezeg" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロライ部【ホロライブ切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E9%83%A8%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E9%83%A8%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/cRc8uXp9bCE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 秋元カイ</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【26兔家拜年】兔媽太可愛!pekora發現網路上的人對兔媽的興趣遠高於自己!?</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=cRc8uXp9bCE" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 秋元カイさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E7%A7%8B%E5%85%83%E3%82%AB%E3%82%A4&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E7%A7%8B%E5%85%83%E3%82%AB%E3%82%A4%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/dnUCPOMJXZo/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 HoloPromise 文和烤肉譯站</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">自己的推自己來改變形象 新的一年新的時后(上)【Kronii 】【hololive 烤肉精華】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=dnUCPOMJXZo" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 文和烤肉譯站さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E6%96%87%E5%92%8C%E7%83%A4%E8%82%89%E8%AD%AF%E7%AB%99&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E6%96%87%E5%92%8C%E7%83%A4%E8%82%89%E8%AD%AF%E7%AB%99%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/zy-0QwTqC0I/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 호소이누 Hosoinu</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">그런 방송이 맞습니다</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=zy-0QwTqC0I" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 호소이누 Hosoinuさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%ED%98%B8%EC%86%8C%EC%9D%B4%EB%88%84%20Hosoinu&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%ED%98%B8%EC%86%8C%EC%9D%B4%EB%88%84%20Hosoinu%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/ouy6IbUM7kU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ふみ / Fumi</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">想要給狼媽占卜的兔媽 #hololive #hololive精華 #vtuber中文 #hololive中文 #兔田佩克拉 #兔媽</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=ouy6IbUM7kU" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ふみ /さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%B5%E3%81%BF%20/&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%B5%E3%81%BF%20/%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/Lz8refyE_uU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 初風</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">ぺこマリ体操中急に倒れたフレアちゃんが面白すぎたw #shorts  #不知火フレア #ホロライブ #切り抜き</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=Lz8refyE_uU" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 初風さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%88%9D%E9%A2%A8&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%88%9D%E9%A2%A8%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/9_YpJZ6J08E/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロライブの森【ホロライブ切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">ロボ子さんのしゅしゅ!しゅ!しゅ!しゅ!可愛い【2026/01/03 #shorts  #ロボ子さん #ホロライブ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=9_YpJZ6J08E" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロライブの森【ホロライブ切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E6%A3%AE%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E6%A3%AE%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/OJrftOt5mug/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロ活【ホロライブ切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">イラつき過ぎて全力台パンと絶叫の末にだんだん壊れていくねねち【ホロライブ/桃鈴ねね/切り抜き】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=OJrftOt5mug" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロ活【ホロライブ切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E6%B4%BB%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E6%B4%BB%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/9y7R-n0vQNg/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 TheHolyOtomos</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Cecilia and Biboo Become Gigi's Angel and Devil on Her Shoulders Is So Hilarious</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=9y7R-n0vQNg" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ TheHolyOtomosさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=TheHolyOtomos&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTheHolyOtomos%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/ZJYoD9vf8Nw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 MAX-NENE-MAX-SUBS</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Kanata is shocked by the true scale of Nene's pet ownership [Momosuzu Nene/Amane Kanata/Hololive]</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=ZJYoD9vf8Nw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ MAXさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=MAX&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMAX%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/LwWvpdiEoJ8/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 MelonSoda Ch.</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Calli Making Hilarious Facial Expressions While Playing This Game [ Hololive EN ]</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=LwWvpdiEoJ8" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ MelonSodaさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=MelonSoda&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMelonSoda%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/R_f50zRrZeY/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロライブ切りトリch【VTuber切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">お正月凸待ちをしたら最終的に19人も集まりワチャワチャになるホロメンたちw【白上フブキ/大空スバル/大神ミオ/ホロライブ/切り抜き】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=R_f50zRrZeY" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロライブ切りトリ【切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E3%83%88%E3%83%AA%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E3%83%88%E3%83%AA%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/LwUHXBty9Uc/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロライブ切り抜きSAI</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【うい神様3D】新年から"クソマロ"ならぬ"クソ絵馬"をバッサバッサと3Dの姿で辛辣に捌いていくうい神様w + 『みこだにぇー』ならぬ『ういだがー』爆誕w【ホロライブ切り抜き/しぐれうい/ういママ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=LwUHXBty9Uc" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロライブ切り抜きさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/v3z6g5jGefM/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 TheRealDreik2</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">IRyS Felt Genuine Embarrassment After the Epic FPS Music Kicked in HARD...</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=v3z6g5jGefM" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ TheRealDreik2さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=TheRealDreik2&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTheRealDreik2%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/B-rGPWRNcj4/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Clipper for Flat Vtubers</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Kanade provoked her chat again this year</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=B-rGPWRNcj4" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Clipper for Flat Vtubersさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Clipper%20for%20Flat%20Vtubers&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FClipper%20for%20Flat%20Vtubers%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/ggHNJTHfsrw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 hololive subs</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">The Rise of the Weakest King - Su's Gomoku Tournament Journey 2026</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=ggHNJTHfsrw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ subsさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=subs&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2Fsubs%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/HyH0-cJrpTQ/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 しらけんマニア【ホロライブ切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">ラプ様の可愛すぎるコラボボイスをモノマネした結果劣化版呼ばわりされてしまうぺこら【兎田ぺこら/宝鐘マリンホロライブ切り抜き】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=HyH0-cJrpTQ" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ しらけんマニア【ホロライブ切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%97%E3%82%89%E3%81%91%E3%82%93%E3%83%9E%E3%83%8B%E3%82%A2%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%97%E3%82%89%E3%81%91%E3%82%93%E3%83%9E%E3%83%8B%E3%82%A2%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/xUlOTXSVUOg/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 星火(セイカ) Clip</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">吹雪還以為35在發miComet商業賀卡給大家、還留言幫大忙了 ! 結果發現弄錯的時候還留言抗議 !【星街すいせい/さくらみこ/白上フブキ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=xUlOTXSVUOg" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 星火(セイカ)さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E6%98%9F%E7%81%AB%28%E3%82%BB%E3%82%A4%E3%82%AB%29&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E6%98%9F%E7%81%AB%28%E3%82%BB%E3%82%A4%E3%82%AB%29%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5E4lEdYHslI/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Dar烤肉!</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">久違的禮拜一嘲諷【音乃瀬奏】【hololive中文/翻譯/精華】# #vtuber #shorts</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=5E4lEdYHslI" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 烤肉!さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E7%83%A4%E8%82%89%21&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E7%83%A4%E8%82%89%21%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/nausE6syqZw/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 午風 Afternoonwind</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【Hololive】MIKO打哈欠 みこちあくび 2025/12/29【櫻巫女/さくらみこ】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=nausE6syqZw" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 午風さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%8D%88%E9%A2%A8&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%8D%88%E9%A2%A8%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/oRLA1BuoyIA/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Hololive Gameplay</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Okayu can't stop screaming in the Sky Lagoon area Mega Man X4</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=oRLA1BuoyIA" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Gameplayさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Gameplay&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGameplay%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/mZRM6E9sp8o/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Perrino Ch.</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Momthera Gonna Come To Far East and Check Raora's Room【Hololive EN】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=mZRM6E9sp8o" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Perrinoさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Perrino&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPerrino%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/_x69CWR_UaE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 ホロライブ推し【切り抜き】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">冷静にツッコむばんちょー【桃鈴ねね/轟はじめ/さくらみこ/大空スバル/白上フブキ/ホロライブ切り抜き】 #shorts #vtuber #ホロライブ切り抜き</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=_x69CWR_UaE" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ ホロライブ推し【切り抜き】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%8E%A8%E3%81%97%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%8E%A8%E3%81%97%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/VXWLXwzMQzU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 あてぃしの!【切り抜きちゃんねる】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">まつりちゃんとリオーナの仲のよさに嫉妬してヘラるねねちを慰めるラミィちゃん #shorts #ホロライブ #切り抜き #vtuber #雪花ラミィ #桃鈴ねね #ホロ切り抜き #響咲リオナ</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=VXWLXwzMQzU" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ あてぃしの!【切り抜きちゃんねる】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%81%82%E3%81%A6%E3%81%83%E3%81%97%E3%81%AE%21%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%81%82%E3%81%A6%E3%81%83%E3%81%97%E3%81%AE%21%E3%80%90%E5%88%87%E3%82%8A%E6%8A%9C%E3%81%8D%E3%81%A1%E3%82%83%E3%82%93%E3%81%AD%E3%82%8B%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/5VpjayuOha0/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Takomachi Ch.</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">Ina Cute WOOF WOOF WOOF !</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=5VpjayuOha0" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Takomachiさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Takomachi&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FTakomachi%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/bFRJQYIV15U/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Airani Iofifteen Channel hololive-ID</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">HAPPY NEW YEAR KKC!</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=bFRJQYIV15U" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Airani Iofifteenさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Airani%20Iofifteen&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAirani%20Iofifteen%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/AZVMXPG4MHE/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 R.P.S. Channel</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">【超縮時繪圖影片】天使重返天界：讓我們含淚道別,感謝心中的守護者💫【RPS Channel/Hololive/ホロライブ/天音彼方/天音かなた】 | 繪圖過程 | 渣技術塗鴉</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=AZVMXPG4MHE" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ R.P.S.さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=R.P.S.&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FR.P.S.%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/qlyfeciKGFU/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 Ayunda Risu Ch. hololive-ID</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">HAPPY NEW YEAR !!!! (UNARCHIVED KARAOKE)</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=qlyfeciKGFU" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ Ayunda Risuさんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=Ayunda%20Risu&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAyunda%20Risu%2F" target="_blank" class="btn-sub rak">楽天市場</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/q9L-yYHiBrc/mqdefault.jpg" loading="lazy" onerror="this.src='https://placehold.jp/24/00c2ff/ffffff/320x180.png?text=Hololive'">
-                <div class="org-tag">Hololive</div>
-            </div>
-            <div class="info">
-                <div class="ch-name">👤 夜リ【主推小粥的烤肉頻道】</div>
-                <div class="highlight">✨ 注目の配信！</div>
-                <div class="v-title">小粥竟發現超稀有廢棄傳送門?!這難道就是和族長幸運親親的力量嗎?【中文翻譯/貓又おかゆ/NekomataOkayu/貓又小粥/hololive/兎田ぺこら/usadapekora/】</div>
-                <div class="ai-msg">💬 一緒に視聴して応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=q9L-yYHiBrc" target="_blank" class="btn-main">今すぐ応援（視聴）</a>
-                    <div class="support-text">＼ 夜リ【主推小粥的烤肉頻道】さんの活動を支援 ／</div>
-                    <div class="merch-links">
-                        <a href="https://www.amazon.co.jp/s?k=%E5%A4%9C%E3%83%AA%E3%80%90%E4%B8%BB%E6%8E%A8%E5%B0%8F%E7%B2%A5%E7%9A%84%E7%83%A4%E8%82%89%E9%A0%BB%E9%81%93%E3%80%91&tag=191383501790a-22" target="_blank" class="btn-sub amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E5%A4%9C%E3%83%AA%E3%80%90%E4%B8%BB%E6%8E%A8%E5%B0%8F%E7%B2%A5%E7%9A%84%E7%83%A4%E8%82%89%E9%A0%BB%E9%81%93%E3%80%91%2F" target="_blank" class="btn-sub rak">楽天市場</a>
+                    <a href="https://www.youtube.com/watch?v=kpSY8G2lu1Y" target="_blank" class="btn-main">配信を視聴・応援</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Goldbullet%20%20HOLOSTARS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn-share">📢 この尊さを布教する</a>
+                    
+                    <div class="support-section">
+                        <p class="section-title">活動を直接支援する</p>
+                        <div class="support-grid">
+                            <a href="https://www.youtube.com/channel/UCJv02SHZgav7Mv3V0kBOR8Q/join" target="_blank" class="s-link">メン限</a>
+                            <a href="https://www.amazon.co.jp/s?k=Goldbullet%20%20HOLOSTARS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
+                            <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGoldbullet%20%20HOLOSTARS%2F" target="_blank" class="s-link rak">楽天</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div></div>
-            <div id="stars" class="grid"><p style='grid-column:1/-1;text-align:center;padding:50px;'>ただいま応援データを準備中です...</p></div>
+            <div id="stars" class="grid"><p class='error-msg'>データ取得中...</p></div>
         </div>
-        <footer style="text-align: center; padding: 40px; font-size: 12px; color: #94a3b8;">© 2026 ホロライブ応援ナビ</footer>
+        <footer>
+            <p>© 2026 ホロライブ応援ナビ | 非公式応援プロジェクト</p>
+            <p style="font-size: 10px;">当サイトはAIを用いて情報を整理しています。最新の公式情報は各チャンネルをご確認ください。</p>
+        </footer>
     </body>
     </html>
