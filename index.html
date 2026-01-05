@@ -5,45 +5,37 @@
         <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ホロ応援ナビ</title>
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         <style>
             :root { --main: #00c2ff; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; }
             @media (prefers-color-scheme: dark) { :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; } }
-            body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; }
-            header { background: linear-gradient(135deg, #00c2ff, #0078ff); color: #fff; padding: 50px 20px 80px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
-            
+            body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 90px; }
+            header { background: linear-gradient(135deg, #00c2ff, #0078ff); color: #fff; padding: 50px 20px 80px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%); }
             .nav-filter { display: flex; justify-content: center; gap: 8px; margin: -25px auto 40px; position: relative; z-index: 100; flex-wrap: wrap; }
             .f-btn { padding: 10px 18px; border: none; background: var(--card); color: #475569; border-radius: 50px; font-weight: 900; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; }
             .f-btn.active { background: var(--main); color: white; }
-
             .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-            .pick-card { background: var(--card); border-radius: 40px; display: grid; grid-template-columns: 1.6fr 1fr; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.1); margin-bottom: 50px; border: 4px solid var(--main); }
+            .pick-card { background: var(--card); border-radius: 40px; display: grid; grid-template-columns: 1.6fr 1fr; overflow: hidden; margin-bottom: 50px; }
             @media (max-width: 900px) { .pick-card { grid-template-columns: 1fr; } }
-
             .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-            .card { background: var(--card); border-radius: 32px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; position: relative; }
-            .card:hover { transform: translateY(-10px); }
-            
+            .card { background: var(--card); border-radius: 32px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.3s; display: flex; flex-direction: column; }
             .thumb-box { position: relative; aspect-ratio: 16/9; }
             .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
             .badge { position: absolute; top: 15px; right: 15px; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 900; color: #fff; background: #ffb800; }
             .badge.live { background: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-            
-            .topic-tag { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-            .oshi-btn { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 18px; color: #ccc; transition: 0.2s; }
+            .oshi-btn { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 18px; color: #ccc; }
             .oshi-btn.active { color: #ff4757; background: #fff; }
-
             .card-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
             .highlight-txt { font-size: 1.3rem; font-weight: 900; margin: 10px 0; }
-            .quote-box { background: rgba(0,194,255,0.05); padding: 14px; border-radius: 18px; font-size: 14px; border-left: 5px solid var(--main); margin-bottom: 20px; }
-            
-            .btn { display: block; text-decoration: none; text-align: center; padding: 14px; border-radius: 16px; font-weight: 900; background: var(--main); color: #fff; }
-            .support-grid { display: flex; gap: 6px; margin-top: 10px; }
-            .s-link { flex: 1; text-decoration: none; font-size: 11px; font-weight: 900; text-align: center; padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.05); color: var(--text); }
-
-            /* ボトムナビゲーション */
+            .quote-box { background: rgba(0,194,255,0.06); padding: 14px; border-radius: 18px; font-size: 14px; border-left: 5px solid var(--main); margin-bottom: 20px; font-weight: 700; }
+            .btn { display: block; text-decoration: none; text-align: center; padding: 14px; border-radius: 16px; font-weight: 900; margin-bottom: 8px; font-size: 14px; }
+            .btn.watch { background: var(--main); color: #fff; }
+            .btn.reserve { background: #ffb800; color: #fff; }
+            .btn.share { background: #000; color: #fff; }
+            .support-grid { display: flex; gap: 6px; }
+            .s-link { flex: 1; text-decoration: none; font-size: 10px; font-weight: 900; text-align: center; padding: 10px 2px; border-radius: 10px; background: rgba(0,0,0,0.05); color: var(--text); }
             .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
-            .nav-item { text-decoration: none; color: #94a3b8; font-size: 10px; text-align: center; font-weight: 900; }
+            .nav-item { text-decoration: none; color: #94a3b8; font-size: 10px; text-align: center; font-weight: 900; cursor:pointer; }
             .nav-item.active { color: var(--main); }
         </style>
     </head>
@@ -58,1272 +50,1322 @@
         </div>
         <div class="container">
             <div class="pick-area">
-        <div class="pick-card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw">
+        <div class="pick-card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw" style="border: 3px solid #00c2ff;">
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/R59nrJiuuC8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/R59nrJiuuC8/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC6eWCld0KwmyHFbAqK3V-Rw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Koyori ch. 博衣こより - holoX -</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Koyori ch. 博衣こより - holoX -</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=R59nrJiuuC8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div></div>
             <div class="grid" id="mainGrid">
-        <div class="card" data-group="JP" data-ch-id="UCvzGlP9oQwU--Y0r9id_jnA">
+        <div class="card" data-group="JP" data-ch-id="UCvzGlP9oQwU--Y0r9id_jnA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/bEy6uanGG2I/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/bEy6uanGG2I/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCvzGlP9oQwU--Y0r9id_jnA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Subaru Ch. 大空スバル</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Subaru Ch. 大空スバル</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=bEy6uanGG2I" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSubaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSubaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCa9Y57gfeY0Zro_noHRVrnw">
+        <div class="card" data-group="JP" data-ch-id="UCa9Y57gfeY0Zro_noHRVrnw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/nLtbpY_bVAY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/nLtbpY_bVAY/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCa9Y57gfeY0Zro_noHRVrnw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Luna Ch. 姫森ルーナ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Luna Ch. 姫森ルーナ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=nLtbpY_bVAY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLuna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLuna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ID" data-ch-id="UCTvHWSfBZgtxE4sILOaurIQ">
+        <div class="card" data-group="ID" data-ch-id="UCTvHWSfBZgtxE4sILOaurIQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/LR0cdPl7BmA/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/LR0cdPl7BmA/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCTvHWSfBZgtxE4sILOaurIQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Vestia Zeta Ch. hololive-ID</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Vestia Zeta Ch. hololive-ID</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=LR0cdPl7BmA" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Vestia%20Zeta&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Vestia%20Zeta&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVestia%20Zeta%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Vestia%20Zeta&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVestia%20Zeta%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCL_qhgtOy0dy1Agp8vkySQg">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/QUgskriSfPU/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/QUgskriSfPU/mqdefault.jpg'" loading="lazy">
-                <div class="badge live">LIVE</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCL_qhgtOy0dy1Agp8vkySQg')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Mori Calliope Ch. hololive-EN</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=QUgskriSfPU" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Mori%20Calliope&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMori%20Calliope%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="ID" data-ch-id="UCAoy6rzhSf4ydcYjJw3WoVg">
+        <div class="card" data-group="ID" data-ch-id="UCAoy6rzhSf4ydcYjJw3WoVg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/sqQICKUoVa4/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/sqQICKUoVa4/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCAoy6rzhSf4ydcYjJw3WoVg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Airani Iofifteen Channel hololive-ID</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Airani Iofifteen Channel hololive-ID</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=sqQICKUoVa4" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Airani%20Iofifteen&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Airani%20Iofifteen&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAirani%20Iofifteen%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Airani%20Iofifteen&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAirani%20Iofifteen%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg">
+        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/oHbeUmyoSe8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/oHbeUmyoSe8/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdn5BQ06XqgXoAxIhbqw5Rg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 フブキCh。白上フブキ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 フブキCh。白上フブキ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=oHbeUmyoSe8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UC1DCedRgGHBdm81E1llLhOQ">
+        <div class="card" data-group="JP" data-ch-id="UC1DCedRgGHBdm81E1llLhOQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/jkLFpWJ1xOA/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/jkLFpWJ1xOA/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC1DCedRgGHBdm81E1llLhOQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Pekora Ch. 兎田ぺこら</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Pekora Ch. 兎田ぺこら</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=jkLFpWJ1xOA" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Pekora%20%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Pekora%20%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPekora%20%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Pekora%20%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPekora%20%20%E5%85%8E%E7%94%B0%E3%81%BA%E3%81%93%E3%82%89%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ">
+        <div class="card" data-group="JP" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/KI42-csKR20/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/KI42-csKR20/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdXAk5MpyLD8594lm_OvtGQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=KI42-csKR20" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UC-hM6YJuNYVAmUWxeIr9FeA">
+        <div class="card" data-group="JP" data-ch-id="UC-hM6YJuNYVAmUWxeIr9FeA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/k5-rFFF3jaM/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/k5-rFFF3jaM/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC-hM6YJuNYVAmUWxeIr9FeA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Miko Ch. さくらみこ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Miko Ch. さくらみこ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=k5-rFFF3jaM" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Miko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Miko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMiko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Miko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMiko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UC0TXe_LYZ4scaW2XMyi5_kw">
+        <div class="card" data-group="JP" data-ch-id="UC0TXe_LYZ4scaW2XMyi5_kw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/9fwUG5bxpZY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/9fwUG5bxpZY/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC0TXe_LYZ4scaW2XMyi5_kw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 AZKi Channel</p>
+                <p class="ch-name" style="color:#00c2ff">👤 AZKi Channel</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=9fwUG5bxpZY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23AZKi&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCqm3BQLlJfvkTsX_hvm0UmA">
+        <div class="card" data-group="JP" data-ch-id="UCqm3BQLlJfvkTsX_hvm0UmA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/ILoL0MNbW2c/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/ILoL0MNbW2c/mqdefault.jpg'" loading="lazy">
                 <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCqm3BQLlJfvkTsX_hvm0UmA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Watame Ch. 角巻わため</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Watame Ch. 角巻わため</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=ILoL0MNbW2c" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Watame%20%20%E8%A7%92%E5%B7%BB%E3%82%8F%E3%81%9F%E3%82%81&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Watame%20%20%E8%A7%92%E5%B7%BB%E3%82%8F%E3%81%9F%E3%82%81&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FWatame%20%20%E8%A7%92%E5%B7%BB%E3%82%8F%E3%81%9F%E3%82%81%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Watame%20%20%E8%A7%92%E5%B7%BB%E3%82%8F%E3%81%9F%E3%82%81&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FWatame%20%20%E8%A7%92%E5%B7%BB%E3%82%8F%E3%81%9F%E3%82%81%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng">
+        <div class="card" data-group="JP" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/vIVV59MTNds/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/vIVV59MTNds/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="2026-01-05T14:00:00.000Z">待機中</div>
+                <div class="badge live">LIVE</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCtyWhCj3AqKh2dXctLkDtng')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=vIVV59MTNds" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCl69AEx4MdqMZH7Jtsm7Tig">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="2026-01-05T18:00:00.000Z">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCl69AEx4MdqMZH7Jtsm7Tig')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Raora Panthera Ch. hololive-EN</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="EN" data-ch-id="UCDHABijvPBnJm7F-KlNME3w">
+        <div class="card" data-group="EN" data-ch-id="UCDHABijvPBnJm7F-KlNME3w" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/Q7Y9C3LhUfU/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/Q7Y9C3LhUfU/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-05T18:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCDHABijvPBnJm7F-KlNME3w')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Gigi Murin Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Gigi Murin Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=Q7Y9C3LhUfU" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90MONSTER%20HUNTER%20WILDS%E3%80%91COLLABORATION%20OUTFIT%20AND%20HUNTS%20WITH%20%40holoen_raorapanthera&dates=20260105T180000Z/20260105T190000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Gigi%20Murin&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Gigi%20Murin&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGigi%20Murin%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Gigi%20Murin&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGigi%20Murin%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCgnfPPb9JI3e9A4cXHnWbyg">
+        <div class="card" data-group="EN" data-ch-id="UCl69AEx4MdqMZH7Jtsm7Tig" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/DYPo0jOcTTE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/DYPo0jOcTTE/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="2026-01-05T18:00:00.000Z">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCl69AEx4MdqMZH7Jtsm7Tig')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Raora Panthera Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=DYPo0jOcTTE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90MONSTER%20HUNTER%20WILDS%E3%80%91SPECIAL%20COLLABORATION%20OUTFIT%20REVEAL%20with%20GIGI%21%21%21&dates=20260105T180000Z/20260105T190000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raora%20Panthera&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="EN" data-ch-id="UCgnfPPb9JI3e9A4cXHnWbyg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/hikUwPHO7WY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/hikUwPHO7WY/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-05T21:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCgnfPPb9JI3e9A4cXHnWbyg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Shiori Novella Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Shiori Novella Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=hikUwPHO7WY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91Surrealist%20%27Girlhood%27%20Horror%20Game%20%E3%80%90Decarnation%E3%80%91&dates=20260105T210000Z/20260105T220000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Shiori%20Novella&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Shiori%20Novella&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiori%20Novella%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Shiori%20Novella&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiori%20Novella%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw">
+        <div class="card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/e3zgCI0F4fc/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/e3zgCI0F4fc/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-05T22:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC6eWCld0KwmyHFbAqK3V-Rw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Koyori ch. 博衣こより - holoX -</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Koyori ch. 博衣こより - holoX -</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=e3zgCI0F4fc" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90%20%23%E6%9C%9D%E3%81%93%E3%82%88%20%E3%80%91%E6%97%A9%E6%9C%9D%E9%80%86%E5%87%B8%E3%82%A2%E3%83%AA%E2%81%892026%E5%B9%B4%E6%9C%80%E5%88%9D%E3%81%AE%21%E7%81%AB%E6%9B%9C%E6%97%A5%E3%81%AE%E6%9C%9D%E3%82%82%E6%9C%9D%E3%81%93%E3%82%88~%21%E2%98%80%20%23266%20%E3%80%90%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A/hololive%E3%80%91&dates=20260105T220000Z/20260105T230000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCL_qhgtOy0dy1Agp8vkySQg">
+        <div class="card" data-group="EN" data-ch-id="UCL_qhgtOy0dy1Agp8vkySQg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/9kKfDvJK6xE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/9kKfDvJK6xE/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="2026-01-06T00:00:00.000Z">待機中</div>
+                <div class="badge upcoming" data-start="2026-01-06T01:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCL_qhgtOy0dy1Agp8vkySQg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Mori Calliope Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Mori Calliope Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=9kKfDvJK6xE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90My%20Little%20Puppy%E3%80%91what%20the%20dog%20doin%20%23calliolive&dates=20260106T010000Z/20260106T020000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Mori%20Calliope&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Mori%20Calliope&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMori%20Calliope%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Mori%20Calliope&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMori%20Calliope%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCozx5csNhCx1wsVq3SZVkBQ">
+        <div class="card" data-group="JP" data-ch-id="UCozx5csNhCx1wsVq3SZVkBQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/szNx4GpnVMs/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/szNx4GpnVMs/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-06T03:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCozx5csNhCx1wsVq3SZVkBQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 holoAN room (ホロアナ)</p>
+                <p class="ch-name" style="color:#00c2ff">👤 holoAN room (ホロアナ)</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=szNx4GpnVMs" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90%E5%A4%A7%E8%AB%96%E4%BA%89%E3%80%91%E3%81%8A%E9%9B%91%E7%85%AE%E3%81%AF%E5%91%B3%E5%99%8C%E3%81%8B%E9%86%A4%E6%B2%B9%E3%81%8B%3F%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E6%AC%84%E3%81%A7%E7%99%BD%E9%BB%92%E3%81%A4%E3%81%91%E3%81%BE%E3%81%99%21%E3%80%90%E6%98%BC%E3%83%9B%E3%83%AD/%E8%8A%B1%E5%9C%92%E3%81%95%E3%82%84%E3%81%8B/%E9%A2%A8%E7%99%BD%E3%82%86%E3%81%8D%E3%80%91&dates=20260106T030000Z/20260106T040000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23holoAN%20room%20%28%E3%83%9B%E3%83%AD%E3%82%A2%E3%83%8A%29&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=holoAN%20room%20%28%E3%83%9B%E3%83%AD%E3%82%A2%E3%83%8A%29&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FholoAN%20room%20%28%E3%83%9B%E3%83%AD%E3%82%A2%E3%83%8A%29%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=holoAN%20room%20%28%E3%83%9B%E3%83%AD%E3%82%A2%E3%83%8A%29&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FholoAN%20room%20%28%E3%83%9B%E3%83%AD%E3%82%A2%E3%83%8A%29%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ">
+        <div class="card" data-group="JP" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/bt4OAEPrtAQ/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/bt4OAEPrtAQ/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-06T09:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdXAk5MpyLD8594lm_OvtGQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=bt4OAEPrtAQ" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90%E6%9D%B1%E4%BA%AC%E5%9B%BD%E7%AB%8B%E5%8D%9A%E7%89%A9%E9%A4%A8%E3%80%91%E3%83%88%E3%83%BC%E3%83%8F%E3%82%AF%E3%81%A7%E9%87%91%E5%89%9B%E5%8A%9B%E5%A3%AB%E7%AB%8B%E5%83%8F%E3%82%92%E3%81%98%E3%81%A3%E3%81%8F%E3%82%8A%E8%A6%8B%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86%21%E3%80%90%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20/%E3%81%8D%E3%82%89%E5%AD%90/%E5%8C%97%E7%99%BD%E5%B7%9D%E3%81%8B%E3%81%8B%E3%81%BD%E3%80%91&dates=20260106T090000Z/20260106T100000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCvaTdHTWBGv3MKj3KVqJVCw">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/WXsDsIdgo34/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/WXsDsIdgo34/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="2026-01-06T11:00:00.000Z">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCvaTdHTWBGv3MKj3KVqJVCw')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Okayu Ch. 猫又おかゆ</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=WXsDsIdgo34" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="JP" data-ch-id="UC0TXe_LYZ4scaW2XMyi5_kw">
+        <div class="card" data-group="JP" data-ch-id="UC0TXe_LYZ4scaW2XMyi5_kw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/rfU2mELx7Aw/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/rfU2mELx7Aw/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-06T11:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC0TXe_LYZ4scaW2XMyi5_kw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 AZKi Channel</p>
+                <p class="ch-name" style="color:#00c2ff">👤 AZKi Channel</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=rfU2mELx7Aw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90%E3%82%AA%E3%83%95%E3%82%B3%E3%83%A9%E3%83%9C%E3%80%91%23KoZMy%20%E6%96%B0%E6%98%A5%E3%83%9B%E3%83%A9%E3%82%B2%E3%82%B3%E3%83%A9%E3%83%9C%21%E6%97%A5%E6%9C%AC%E4%BA%8B%E6%95%85%E7%89%A9%E4%BB%B6%E7%9B%A3%E8%A6%96%E5%8D%94%E4%BC%9A2%20-JSP2-%E3%80%90%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20/%20AZKi%20/%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%20/%20%E9%9B%AA%E8%8A%B1%E3%83%A9%E3%83%9F%E3%82%A3%E3%80%91&dates=20260106T110000Z/20260106T120000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23AZKi&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=AZKi&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAZKi%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UC1iA6_NT4mtAcIII6ygrvCw">
+        <div class="card" data-group="JP" data-ch-id="UCvaTdHTWBGv3MKj3KVqJVCw" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/WXsDsIdgo34/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/WXsDsIdgo34/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="2026-01-06T11:00:00.000Z">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCvaTdHTWBGv3MKj3KVqJVCw')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Okayu Ch. 猫又おかゆ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=WXsDsIdgo34" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%E3%80%90%20%E3%83%A9%E3%82%B8%E3%82%B3%E3%83%B3%E4%BC%81%E7%94%BB%20%E3%80%91%E5%A3%B0%E6%8B%85%E5%BD%93%E3%81%A8%E6%8C%87%E7%A4%BA%E6%8B%85%E5%BD%93%E3%81%8C%E9%A7%86%E3%81%91%E3%81%A4%E3%81%91%E3%81%A6%E3%81%8F%E3%82%8C%E3%81%9F%E3%82%BE%E3%80%90%20%23%E3%82%B9%E3%83%90%E3%81%8A%E3%81%8B%E3%81%99%E3%81%84%20/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%20%E3%80%91&dates=20260106T110000Z/20260106T120000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="JP" data-ch-id="UC1iA6_NT4mtAcIII6ygrvCw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/HSaTA96xLHY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/HSaTA96xLHY/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="2026-01-06T13:00:00.000Z">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC1iA6_NT4mtAcIII6ygrvCw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Hajime Ch. 轟はじめ ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Hajime Ch. 轟はじめ ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=HSaTA96xLHY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=%E3%80%90%E8%A6%96%E8%81%B4%E3%80%91%233%E3%80%90%E3%83%90%E3%82%A4%E3%82%AA%E3%83%8F%E3%82%B6%E3%83%BC%E3%83%89%20HD%E3%83%AA%E3%83%9E%E3%82%B9%E3%82%BF%E3%83%BC%E3%80%91%E5%AE%8C%E5%85%A8%E5%88%9D%E8%A6%8B%E3%81%A7%E6%8C%91%E3%82%80%E5%88%9D%E4%BB%A3%E3%83%90%E3%82%A4%E3%82%AA%E3%81%AE%E4%B8%96%E7%95%8C%E3%80%90%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81/ReGLOSS%E3%80%91&dates=20260106T130000Z/20260106T140000Z" target="_blank" class="btn reserve">📅 予約 (カレンダー)</a>
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Hajime%20%20%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Hajime%20%20%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHajime%20%20%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Hajime%20%20%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHajime%20%20%E8%BD%9F%E3%81%AF%E3%81%98%E3%82%81%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCGzTVXqMQHa4AgJVJIVvtDQ">
+        <div class="card" data-group="JP" data-ch-id="UCGzTVXqMQHa4AgJVJIVvtDQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/wnjd9XuuXg0/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/wnjd9XuuXg0/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCGzTVXqMQHa4AgJVJIVvtDQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Vivi Ch. 綺々羅々ヴィヴィ - FLOW GLOW</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Vivi Ch. 綺々羅々ヴィヴィ - FLOW GLOW</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=wnjd9XuuXg0" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Vivi%20%20%E7%B6%BA%E3%80%85%E7%BE%85%E3%80%85%E3%83%B4%E3%82%A3%E3%83%B4%E3%82%A3&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Vivi%20%20%E7%B6%BA%E3%80%85%E7%BE%85%E3%80%85%E3%83%B4%E3%82%A3%E3%83%B4%E3%82%A3&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVivi%20%20%E7%B6%BA%E3%80%85%E7%BE%85%E3%80%85%E3%83%B4%E3%82%A3%E3%83%B4%E3%82%A3%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Vivi%20%20%E7%B6%BA%E3%80%85%E7%BE%85%E3%80%85%E3%83%B4%E3%82%A3%E3%83%B4%E3%82%A3&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVivi%20%20%E7%B6%BA%E3%80%85%E7%BE%85%E3%80%85%E3%83%B4%E3%82%A3%E3%83%B4%E3%82%A3%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg">
+        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/lqm48iNoKOY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/lqm48iNoKOY/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdn5BQ06XqgXoAxIhbqw5Rg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 フブキCh。白上フブキ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 フブキCh。白上フブキ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=lqm48iNoKOY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UC1suqwovbL1kzsoaZgFZLKg">
+        <div class="card" data-group="JP" data-ch-id="UC1suqwovbL1kzsoaZgFZLKg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/-tMd6H-IxcA/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/-tMd6H-IxcA/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC1suqwovbL1kzsoaZgFZLKg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Choco Ch. 癒月ちょこ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Choco Ch. 癒月ちょこ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=-tMd6H-IxcA" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Choco%20%20%E7%99%92%E6%9C%88%E3%81%A1%E3%82%87%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Choco%20%20%E7%99%92%E6%9C%88%E3%81%A1%E3%82%87%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChoco%20%20%E7%99%92%E6%9C%88%E3%81%A1%E3%82%87%E3%81%93%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Choco%20%20%E7%99%92%E6%9C%88%E3%81%A1%E3%82%87%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChoco%20%20%E7%99%92%E6%9C%88%E3%81%A1%E3%82%87%E3%81%93%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCgmPnx-EEeOrZSg5Tiw7ZRQ">
+        <div class="card" data-group="EN" data-ch-id="UCgmPnx-EEeOrZSg5Tiw7ZRQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/197OEpjj8RI/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/197OEpjj8RI/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCgmPnx-EEeOrZSg5Tiw7ZRQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Hakos Baelz Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Hakos Baelz Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=197OEpjj8RI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Hakos%20Baelz&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Hakos%20Baelz&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FHakos%20Baelz%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/MDwkJVqui_M/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/MDwkJVqui_M/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCdn5BQ06XqgXoAxIhbqw5Rg')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 フブキCh。白上フブキ</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=MDwkJVqui_M" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg">
+        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/rKMhl43RHo0/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/rKMhl43RHo0/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdn5BQ06XqgXoAxIhbqw5Rg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 フブキCh。白上フブキ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 フブキCh。白上フブキ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=rKMhl43RHo0" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCDqI2jOz0weumE8s7paEk6g">
+        <div class="card" data-group="JP" data-ch-id="UCdn5BQ06XqgXoAxIhbqw5Rg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/MDwkJVqui_M/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/MDwkJVqui_M/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCdn5BQ06XqgXoAxIhbqw5Rg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 フブキCh。白上フブキ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=MDwkJVqui_M" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%83%95%E3%83%96%E3%82%ADCh%E3%80%82%E7%99%BD%E4%B8%8A%E3%83%95%E3%83%96%E3%82%AD%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="JP" data-ch-id="UCDqI2jOz0weumE8s7paEk6g" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/oXxS8AwgTUw/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/oXxS8AwgTUw/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCDqI2jOz0weumE8s7paEk6g')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Roboco Ch. - ロボ子</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Roboco Ch. - ロボ子</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=oXxS8AwgTUw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Roboco&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCDHABijvPBnJm7F-KlNME3w">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/mNJXOH01vOY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/mNJXOH01vOY/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCDHABijvPBnJm7F-KlNME3w')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Gigi Murin Ch. hololive-EN</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=mNJXOH01vOY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Gigi%20Murin&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FGigi%20Murin%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng">
+        <div class="card" data-group="JP" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/XfTmGxpgN0g/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/XfTmGxpgN0g/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCtyWhCj3AqKh2dXctLkDtng')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=XfTmGxpgN0g" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ID" data-ch-id="UCZLZ8Jjx_RN2CXloOmgTHVg">
+        <div class="card" data-group="ID" data-ch-id="UCZLZ8Jjx_RN2CXloOmgTHVg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/1WhsM61BUfk/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/1WhsM61BUfk/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCZLZ8Jjx_RN2CXloOmgTHVg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Kaela Kovalskia Ch. hololive-ID</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Kaela Kovalskia Ch. hololive-ID</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=1WhsM61BUfk" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kaela%20Kovalskia&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Kaela%20Kovalskia&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKaela%20Kovalskia%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Kaela%20Kovalskia&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKaela%20Kovalskia%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCDqI2jOz0weumE8s7paEk6g">
+        <div class="card" data-group="JP" data-ch-id="UCDqI2jOz0weumE8s7paEk6g" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/IlYErJ1ry_8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/IlYErJ1ry_8/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCDqI2jOz0weumE8s7paEk6g')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Roboco Ch. - ロボ子</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Roboco Ch. - ロボ子</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=IlYErJ1ry_8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Roboco&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw">
+        <div class="card" data-group="holoX" data-ch-id="UC6eWCld0KwmyHFbAqK3V-Rw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/0vD220xScBE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/0vD220xScBE/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC6eWCld0KwmyHFbAqK3V-Rw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Koyori ch. 博衣こより - holoX -</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Koyori ch. 博衣こより - holoX -</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=0vD220xScBE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Koyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoyori%20%20%E5%8D%9A%E8%A1%A3%E3%81%93%E3%82%88%E3%82%8A%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ">
+        <div class="card" data-group="JP" data-ch-id="UCdXAk5MpyLD8594lm_OvtGQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/SCVbMM71viE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/SCVbMM71viE/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdXAk5MpyLD8594lm_OvtGQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Raden Ch. 儒烏風亭らでん ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=SCVbMM71viE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Raden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaden%20%20%E5%84%92%E7%83%8F%E9%A2%A8%E4%BA%AD%E3%82%89%E3%81%A7%E3%82%93%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCvaTdHTWBGv3MKj3KVqJVCw">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/pulP400cTpE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/pulP400cTpE/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCvaTdHTWBGv3MKj3KVqJVCw')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Okayu Ch. 猫又おかゆ</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=pulP400cTpE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng">
+        <div class="card" data-group="JP" data-ch-id="UCtyWhCj3AqKh2dXctLkDtng" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/R7RD_-evcsE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/R7RD_-evcsE/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCtyWhCj3AqKh2dXctLkDtng')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Ririka Ch. 一条莉々華 ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=R7RD_-evcsE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Ririka%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRirika%20%20%E4%B8%80%E6%9D%A1%E8%8E%89%E3%80%85%E8%8F%AF%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ID" data-ch-id="UCOyYb1c43VlX9rc_lT6NKQw">
+        <div class="card" data-group="ID" data-ch-id="UCOyYb1c43VlX9rc_lT6NKQw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/hsAr4h_Mljw/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/hsAr4h_Mljw/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCOyYb1c43VlX9rc_lT6NKQw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Ayunda Risu Ch. hololive-ID</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Ayunda Risu Ch. hololive-ID</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=hsAr4h_Mljw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ayunda%20Risu&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ayunda%20Risu&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAyunda%20Risu%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Ayunda%20Risu&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAyunda%20Risu%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCuI_opAVX6qbxZY-a-AxFuQ">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/M9H0gTvKmGU/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/M9H0gTvKmGU/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCuI_opAVX6qbxZY-a-AxFuQ')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Niko Ch. 虎金妃笑虎 - FLOW GLOW</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=M9H0gTvKmGU" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Niko%20%20%E8%99%8E%E9%87%91%E5%A6%83%E7%AC%91%E8%99%8E&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNiko%20%20%E8%99%8E%E9%87%91%E5%A6%83%E7%AC%91%E8%99%8E%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="JP" data-ch-id="UCKMWFR6lAstLa7Vbf5dH7ig">
+        <div class="card" data-group="JP" data-ch-id="UCKMWFR6lAstLa7Vbf5dH7ig" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/Pd9VYQtr2c4/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/Pd9VYQtr2c4/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCKMWFR6lAstLa7Vbf5dH7ig')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Chihaya Ch. 輪堂 千速 - FLOW GLOW</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=Pd9VYQtr2c4" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Chihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Chihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Chihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChihaya%20%20%E8%BC%AA%E5%A0%82%20%E5%8D%83%E9%80%9F%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCl69AEx4MdqMZH7Jtsm7Tig">
+        <div class="card" data-group="EN" data-ch-id="UCl69AEx4MdqMZH7Jtsm7Tig" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/hlO4qb_v6hM/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/hlO4qb_v6hM/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCl69AEx4MdqMZH7Jtsm7Tig')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Raora Panthera Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Raora Panthera Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=hlO4qb_v6hM" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Raora%20Panthera&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Raora%20Panthera&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRaora%20Panthera%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCFTLzh12_nrtzqBPsTCqenA">
+        <div class="card" data-group="JP" data-ch-id="UCFTLzh12_nrtzqBPsTCqenA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/VoWHIX4tp5k/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/VoWHIX4tp5k/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCFTLzh12_nrtzqBPsTCqenA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 アキロゼCh。Vtuber/ホロライブ所属</p>
+                <p class="ch-name" style="color:#00c2ff">👤 アキロゼCh。Vtuber/ホロライブ所属</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=VoWHIX4tp5k" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23%E3%82%A2%E3%82%AD%E3%83%AD%E3%82%BCCh%E3%80%82Vtuber/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%89%80%E5%B1%9E&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%82%AD%E3%83%AD%E3%82%BCCh%E3%80%82Vtuber/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%89%80%E5%B1%9E&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%82%AD%E3%83%AD%E3%82%BCCh%E3%80%82Vtuber/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%89%80%E5%B1%9E%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=%E3%82%A2%E3%82%AD%E3%83%AD%E3%82%BCCh%E3%80%82Vtuber/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%89%80%E5%B1%9E&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F%E3%82%A2%E3%82%AD%E3%83%AD%E3%82%BCCh%E3%80%82Vtuber/%E3%83%9B%E3%83%AD%E3%83%A9%E3%82%A4%E3%83%96%E6%89%80%E5%B1%9E%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCp-5t9SrOQwXMU7iIjQfARg">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/wz0JpdoKJ-E/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/wz0JpdoKJ-E/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCp-5t9SrOQwXMU7iIjQfARg')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Mio Channel 大神ミオ</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=wz0JpdoKJ-E" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Mio%20%20%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMio%20%20%E5%A4%A7%E7%A5%9E%E3%83%9F%E3%82%AA%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="holoX" data-ch-id="UCs9_O1tRPMQTHQ-N_L6FU2g">
+        <div class="card" data-group="holoX" data-ch-id="UCs9_O1tRPMQTHQ-N_L6FU2g" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/9vaxfw1qFcY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/9vaxfw1qFcY/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCs9_O1tRPMQTHQ-N_L6FU2g')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Lui ch. 鷹嶺ルイ - holoX -</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Lui ch. 鷹嶺ルイ - holoX -</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=9vaxfw1qFcY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Lui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Lui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Lui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCdyqAaZDKHXg4Ahi7VENThQ">
+        <div class="card" data-group="JP" data-ch-id="UCdyqAaZDKHXg4Ahi7VENThQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/sDZFWow3IKI/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/sDZFWow3IKI/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCdyqAaZDKHXg4Ahi7VENThQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Noel Ch. 白銀ノエル</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Noel Ch. 白銀ノエル</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=sDZFWow3IKI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Noel%20%20%E7%99%BD%E9%8A%80%E3%83%8E%E3%82%A8%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Noel%20%20%E7%99%BD%E9%8A%80%E3%83%8E%E3%82%A8%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNoel%20%20%E7%99%BD%E9%8A%80%E3%83%8E%E3%82%A8%E3%83%AB%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Noel%20%20%E7%99%BD%E9%8A%80%E3%83%8E%E3%82%A8%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNoel%20%20%E7%99%BD%E9%8A%80%E3%83%8E%E3%82%A8%E3%83%AB%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCvN5h1ShZtc7nly3pezRayg">
+        <div class="card" data-group="EN" data-ch-id="UCvN5h1ShZtc7nly3pezRayg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/-35UzQOnzRE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/-35UzQOnzRE/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCvN5h1ShZtc7nly3pezRayg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Cecilia Immergreen Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Cecilia Immergreen Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=-35UzQOnzRE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Cecilia%20Immergreen&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Cecilia%20Immergreen&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FCecilia%20Immergreen%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Cecilia%20Immergreen&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FCecilia%20Immergreen%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="ID" data-ch-id="UCTvHWSfBZgtxE4sILOaurIQ">
+        <div class="card" data-group="ID" data-ch-id="UCTvHWSfBZgtxE4sILOaurIQ" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/38fJIy2FoDg/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/38fJIy2FoDg/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCTvHWSfBZgtxE4sILOaurIQ')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Vestia Zeta Ch. hololive-ID</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Vestia Zeta Ch. hololive-ID</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=38fJIy2FoDg" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Vestia%20Zeta&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Vestia%20Zeta&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVestia%20Zeta%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Vestia%20Zeta&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FVestia%20Zeta%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UC_sFNM0z0MWm9A6WlKPuMMg">
+        <div class="card" data-group="EN" data-ch-id="UC_sFNM0z0MWm9A6WlKPuMMg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/Criw5zhE0bI/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/Criw5zhE0bI/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC_sFNM0z0MWm9A6WlKPuMMg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Nerissa Ravencroft Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Nerissa Ravencroft Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=Criw5zhE0bI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Nerissa%20Ravencroft&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Nerissa%20Ravencroft&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNerissa%20Ravencroft%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Nerissa%20Ravencroft&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNerissa%20Ravencroft%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCvzGlP9oQwU--Y0r9id_jnA">
+        <div class="card" data-group="JP" data-ch-id="UCvzGlP9oQwU--Y0r9id_jnA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/wUEN1KE2ZcU/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/wUEN1KE2ZcU/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCvzGlP9oQwU--Y0r9id_jnA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Subaru Ch. 大空スバル</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Subaru Ch. 大空スバル</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=wUEN1KE2ZcU" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSubaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Subaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSubaru%20%20%E5%A4%A7%E7%A9%BA%E3%82%B9%E3%83%90%E3%83%AB%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UC5CwaMl1eIgY8h02uZw7u8A">
+        <div class="card" data-group="JP" data-ch-id="UC5CwaMl1eIgY8h02uZw7u8A" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/O9V_EFbgpKQ/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/O9V_EFbgpKQ/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC5CwaMl1eIgY8h02uZw7u8A')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Suisei Channel</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Suisei Channel</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=O9V_EFbgpKQ" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Suisei&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Suisei&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSuisei%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Suisei&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FSuisei%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="holoX" data-ch-id="UCIBY1ollUsauvVi4hW4cumw">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/BWf5Xy-LIJ0/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/BWf5Xy-LIJ0/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCIBY1ollUsauvVi4hW4cumw')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Chloe ch. 沙花叉クロヱ - holoX -</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=BWf5Xy-LIJ0" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Chloe%20%20%E6%B2%99%E8%8A%B1%E5%8F%89%E3%82%AF%E3%83%AD%E3%83%B1&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FChloe%20%20%E6%B2%99%E8%8A%B1%E5%8F%89%E3%82%AF%E3%83%AD%E3%83%B1%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="JP" data-ch-id="UCa9Y57gfeY0Zro_noHRVrnw">
+        <div class="card" data-group="JP" data-ch-id="UCa9Y57gfeY0Zro_noHRVrnw" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/wPXfKeWU2YE/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/wPXfKeWU2YE/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCa9Y57gfeY0Zro_noHRVrnw')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Luna Ch. 姫森ルーナ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Luna Ch. 姫森ルーナ</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=wPXfKeWU2YE" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLuna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Luna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLuna%20%20%E5%A7%AB%E6%A3%AE%E3%83%AB%E3%83%BC%E3%83%8A%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCMwGHR0BTZuLsmjY_NT5Pwg">
+        <div class="card" data-group="EN" data-ch-id="UCMwGHR0BTZuLsmjY_NT5Pwg" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/c7K6RInG3Dw/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/c7K6RInG3Dw/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCMwGHR0BTZuLsmjY_NT5Pwg')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Ninomae Ina'nis Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Ninomae Ina'nis Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=c7K6RInG3Dw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ninomae%20Ina%27nis&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ninomae%20Ina%27nis&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNinomae%20Ina%27nis%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Ninomae%20Ina%27nis&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FNinomae%20Ina%27nis%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCDqI2jOz0weumE8s7paEk6g">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/CIerV92W9n4/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/CIerV92W9n4/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCDqI2jOz0weumE8s7paEk6g')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Roboco Ch. - ロボ子</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=CIerV92W9n4" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Roboco&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FRoboco%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCWQtYtq9EOB4-I5P-3fh8lA">
+        <div class="card" data-group="JP" data-ch-id="UCWQtYtq9EOB4-I5P-3fh8lA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/GZHhb_zHVno/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/GZHhb_zHVno/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCWQtYtq9EOB4-I5P-3fh8lA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Kanade Ch. 音乃瀬奏 ‐ ReGLOSS</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Kanade Ch. 音乃瀬奏 ‐ ReGLOSS</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=GZHhb_zHVno" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kanade%20%20%E9%9F%B3%E4%B9%83%E7%80%AC%E5%A5%8F%20%E2%80%90&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Kanade%20%20%E9%9F%B3%E4%B9%83%E7%80%AC%E5%A5%8F%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKanade%20%20%E9%9F%B3%E4%B9%83%E7%80%AC%E5%A5%8F%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Kanade%20%20%E9%9F%B3%E4%B9%83%E7%80%AC%E5%A5%8F%20%E2%80%90&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKanade%20%20%E9%9F%B3%E4%B9%83%E7%80%AC%E5%A5%8F%20%E2%80%90%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UC9p_lqQ0FEDz327Vgf5JwqA">
+        <div class="card" data-group="EN" data-ch-id="UC9p_lqQ0FEDz327Vgf5JwqA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/hlDFczhR2mo/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/hlDFczhR2mo/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UC9p_lqQ0FEDz327Vgf5JwqA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Koseki Bijou Ch. hololive-EN</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Koseki Bijou Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=hlDFczhR2mo" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Koseki%20Bijou&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Koseki%20Bijou&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKoseki%20Bijou%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="EN" data-ch-id="UCvN5h1ShZtc7nly3pezRayg">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/u8aMX32hlgQ/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/u8aMX32hlgQ/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCvN5h1ShZtc7nly3pezRayg')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Cecilia Immergreen Ch. hololive-EN</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=u8aMX32hlgQ" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Cecilia%20Immergreen&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FCecilia%20Immergreen%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="ReGLOSS" data-ch-id="UCMGfV7TVTmHhEErVJg1oHBQ">
-            <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/2JciZo2afXg/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/2JciZo2afXg/mqdefault.jpg'" loading="lazy">
-                <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCMGfV7TVTmHhEErVJg1oHBQ')">❤</button>
-                <div class="topic-tag">📺</div>
-            </div>
-            <div class="card-body">
-                <p class="ch-name">👤 Ao Ch. 火威青 ‐ ReGLOSS</p>
-                <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
-                <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=2JciZo2afXg" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
-                    <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Ao%20%20%E7%81%AB%E5%A8%81%E9%9D%92%20%E2%80%90%20ReGLOSS&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAo%20%20%E7%81%AB%E5%A8%81%E9%9D%92%20%E2%80%90%20ReGLOSS%2F" target="_blank" class="s-link rak">楽天</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card" data-group="JP" data-ch-id="UCUKD-uaobj9jiqB-VXt71mA">
+        <div class="card" data-group="JP" data-ch-id="UCUKD-uaobj9jiqB-VXt71mA" >
             <div class="thumb-box">
                 <img src="https://img.youtube.com/vi/smrMuN26M0Q/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/smrMuN26M0Q/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
                 <button class="oshi-btn" onclick="toggleOshi('UCUKD-uaobj9jiqB-VXt71mA')">❤</button>
-                <div class="topic-tag">📺</div>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Botan Ch.獅白ぼたん</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Botan Ch.獅白ぼたん</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
                     <a href="https://www.youtube.com/watch?v=smrMuN26M0Q" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Botan%20%E7%8D%85%E7%99%BD%E3%81%BC%E3%81%9F%E3%82%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Botan%20%E7%8D%85%E7%99%BD%E3%81%BC%E3%81%9F%E3%82%93&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FBotan%20%E7%8D%85%E7%99%BD%E3%81%BC%E3%81%9F%E3%82%93%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Botan%20%E7%8D%85%E7%99%BD%E3%81%BC%E3%81%9F%E3%82%93&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FBotan%20%E7%8D%85%E7%99%BD%E3%81%BC%E3%81%9F%E3%82%93%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCvaTdHTWBGv3MKj3KVqJVCw">
+        <div class="card" data-group="EN" data-ch-id="UCgnfPPb9JI3e9A4cXHnWbyg" >
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/qeyblMfqOGY/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/qeyblMfqOGY/mqdefault.jpg'" loading="lazy">
+                <img src="https://img.youtube.com/vi/UkqwIcO3YN8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/UkqwIcO3YN8/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCvaTdHTWBGv3MKj3KVqJVCw')">❤</button>
-                <div class="topic-tag">📺</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCgnfPPb9JI3e9A4cXHnWbyg')">❤</button>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Okayu Ch. 猫又おかゆ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 Shiori Novella Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=qeyblMfqOGY" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.youtube.com/watch?v=UkqwIcO3YN8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Shiori%20Novella&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=Shiori%20Novella&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FShiori%20Novella%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card" data-group="JP" data-ch-id="UCvaTdHTWBGv3MKj3KVqJVCw">
+        <div class="card" data-group="JP" data-ch-id="UC8rcEBzJSleTkf_-agPM20g" >
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/XfAAINEpAps/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/XfAAINEpAps/mqdefault.jpg'" loading="lazy">
+                <img src="https://img.youtube.com/vi/YgRGMmcfHO8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/YgRGMmcfHO8/mqdefault.jpg'" loading="lazy">
                 <div class="badge upcoming" data-start="None">待機中</div>
-                <button class="oshi-btn" onclick="toggleOshi('UCvaTdHTWBGv3MKj3KVqJVCw')">❤</button>
-                <div class="topic-tag">📺</div>
+                <button class="oshi-btn" onclick="toggleOshi('UC8rcEBzJSleTkf_-agPM20g')">❤</button>
             </div>
             <div class="card-body">
-                <p class="ch-name">👤 Okayu Ch. 猫又おかゆ</p>
+                <p class="ch-name" style="color:#00c2ff">👤 IRyS Ch. hololive-EN</p>
                 <h3 class="highlight-txt">必見の配信！</h3>
-                <div class="quote-box">みんなで応援しましょう！</div>
+                <div class="quote-box">一緒に応援しましょう！</div>
                 <div class="actions">
-                    <a href="https://www.youtube.com/watch?v=XfAAINEpAps" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    <a href="https://www.youtube.com/watch?v=YgRGMmcfHO8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23IRyS&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
                     <div class="support-grid">
-                        <a href="https://www.amazon.co.jp/s?k=Okayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86&tag=191383501790a-22" target="_blank" class="s-link amz">Amazon</a>
-                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOkayu%20%20%E7%8C%AB%E5%8F%88%E3%81%8A%E3%81%8B%E3%82%86%2F" target="_blank" class="s-link rak">楽天</a>
+                        <a href="https://www.amazon.co.jp/s?k=IRyS&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FIRyS%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="ID" data-ch-id="UC727SQYUvx5pDDGQpTICNWg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/JAUSrqX0hW8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/JAUSrqX0hW8/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UC727SQYUvx5pDDGQpTICNWg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Anya Melfissa Ch. hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=JAUSrqX0hW8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Anya%20Melfissa&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Anya%20Melfissa&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAnya%20Melfissa%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="holoX" data-ch-id="UCs9_O1tRPMQTHQ-N_L6FU2g" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/opAtcx6GIKc/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/opAtcx6GIKc/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCs9_O1tRPMQTHQ-N_L6FU2g')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Lui ch. 鷹嶺ルイ - holoX -</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=opAtcx6GIKc" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Lui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Lui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FLui%20%20%E9%B7%B9%E5%B6%BA%E3%83%AB%E3%82%A4%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="EN" data-ch-id="UCmbs8T6MWqUHP1tIQvSgKrg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/6GZ5XGzRY-g/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/6GZ5XGzRY-g/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCmbs8T6MWqUHP1tIQvSgKrg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Ouro Kronii Ch. hololive-EN</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=6GZ5XGzRY-g" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Ouro%20Kronii&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Ouro%20Kronii&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FOuro%20Kronii%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="ID" data-ch-id="UC727SQYUvx5pDDGQpTICNWg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/i1Mg6dv76q8/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/i1Mg6dv76q8/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UC727SQYUvx5pDDGQpTICNWg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Anya Melfissa Ch. hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=i1Mg6dv76q8" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Anya%20Melfissa&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Anya%20Melfissa&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FAnya%20Melfissa%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="JP" data-ch-id="UC-hM6YJuNYVAmUWxeIr9FeA" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/w4dgql_5Rzk/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/w4dgql_5Rzk/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UC-hM6YJuNYVAmUWxeIr9FeA')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Miko Ch. さくらみこ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=w4dgql_5Rzk" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Miko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Miko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMiko%20%20%E3%81%95%E3%81%8F%E3%82%89%E3%81%BF%E3%81%93%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="ID" data-ch-id="UCP0BspO_AMEe3aQqqpo89Dg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/7tFgcf0YcEA/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/7tFgcf0YcEA/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCP0BspO_AMEe3aQqqpo89Dg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Moona Hoshinova hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=7tFgcf0YcEA" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Moona%20Hoshinova&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Moona%20Hoshinova&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMoona%20Hoshinova%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="ID" data-ch-id="UCP0BspO_AMEe3aQqqpo89Dg" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/Fl1vM3scybw/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/Fl1vM3scybw/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCP0BspO_AMEe3aQqqpo89Dg')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Moona Hoshinova hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=Fl1vM3scybw" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Moona%20Hoshinova&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Moona%20Hoshinova&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FMoona%20Hoshinova%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="JP" data-ch-id="UCK9V2B22uJYu3N7eR_BT9QA" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/XeKiT4cLT6U/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/XeKiT4cLT6U/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCK9V2B22uJYu3N7eR_BT9QA')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Polka Ch. 尾丸ポルカ</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=XeKiT4cLT6U" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Polka%20%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Polka%20%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FPolka%20%20%E5%B0%BE%E4%B8%B8%E3%83%9D%E3%83%AB%E3%82%AB%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-group="ID" data-ch-id="UCYz_5n-uDuChHtLo7My1HnQ" >
+            <div class="thumb-box">
+                <img src="https://img.youtube.com/vi/lGr_kZmjskI/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/lGr_kZmjskI/mqdefault.jpg'" loading="lazy">
+                <div class="badge upcoming" data-start="None">待機中</div>
+                <button class="oshi-btn" onclick="toggleOshi('UCYz_5n-uDuChHtLo7My1HnQ')">❤</button>
+            </div>
+            <div class="card-body">
+                <p class="ch-name" style="color:#00c2ff">👤 Kureiji Ollie Ch. hololive-ID</p>
+                <h3 class="highlight-txt">必見の配信！</h3>
+                <div class="quote-box">一緒に応援しましょう！</div>
+                <div class="actions">
+                    <a href="https://www.youtube.com/watch?v=lGr_kZmjskI" target="_blank" class="btn watch">📺 視聴・応援に行く</a>
+                    
+                    <a href="https://twitter.com/intent/tweet?text=%E2%9C%A8%E5%BF%85%E8%A6%8B%E3%81%AE%E9%85%8D%E4%BF%A1%EF%BC%81%0A%E4%B8%80%E7%B7%92%E3%81%AB%E5%BF%9C%E6%8F%B4%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A%23%E3%83%9B%E3%83%AD%E5%BF%9C%E6%8F%B4%E3%83%8A%E3%83%93%20%23Kureiji%20Ollie&url=https://sakagamiyoshikawa-lang.github.io/my-hololive-bot/" target="_blank" class="btn share">📢 布教する</a>
+                    <div class="support-grid">
+                        <a href="https://www.amazon.co.jp/s?k=Kureiji%20Ollie&tag=191383501790a-22" target="_blank" class="s-link amz" onclick="celebrate()">Amazon</a>
+                        <a href="https://hb.afl.rakuten.co.jp/hgc/4fb92fbd.48f820ce.4fb92fbe.82189b12/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2FKureiji%20Ollie%2F" target="_blank" class="s-link rak" onclick="celebrate()">楽天</a>
                     </div>
                 </div>
             </div>
         </div></div>
         </div>
         <div class="bottom-nav">
-            <a href="#" class="nav-item active">🏠 ホーム</a>
-            <a href="#" class="nav-item" onclick="showOshiOnly()">⭐ 推しメン</a>
-            <a href="#featured-footer" class="nav-item">🛒 ショップ</a>
+            <div class="nav-item active" onclick="location.reload()">🏠 ホーム</div>
+            <div class="nav-item" id="oshiModeBtn" onclick="toggleOshiMode()">⭐ 推しメン</div>
         </div>
         <script>
             let oshiList = JSON.parse(localStorage.getItem('oshiList') || '[]');
-            function toggleOshi(id) {
-                oshiList = oshiList.includes(id) ? oshiList.filter(x => x !== id) : [...oshiList, id];
-                localStorage.setItem('oshiList', JSON.stringify(oshiList));
-                renderOshi();
-            }
-            function renderOshi() {
-                document.querySelectorAll('[data-ch-id]').forEach(c => {
-                    const btn = c.querySelector('.oshi-btn');
-                    if (oshiList.includes(c.dataset.ch_id)) btn.classList.add('active');
-                    else btn.classList.remove('active');
-                });
-            }
-            function filter(g) {
-                document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
-                event.target.classList.add('active');
-                document.querySelectorAll('.card, .pick-card').forEach(c => c.style.display = (g === 'all' || c.dataset.group === g) ? 'flex' : 'none');
-            }
+            let oshiMode = false;
+            function toggleOshi(id) { oshiList = oshiList.includes(id) ? oshiList.filter(x => x !== id) : [...oshiList, id]; localStorage.setItem('oshiList', JSON.stringify(oshiList)); renderOshi(); }
+            function renderOshi() { document.querySelectorAll('[data-ch-id]').forEach(c => { const btn = c.querySelector('.oshi-btn'); if (oshiList.includes(c.dataset.ch_id)) btn.classList.add('active'); else btn.classList.remove('active'); if (oshiMode) c.style.display = oshiList.includes(c.dataset.ch_id) ? 'flex' : 'none'; }); }
+            function toggleOshiMode() { oshiMode = !oshiMode; document.getElementById('oshiModeBtn').classList.toggle('active'); renderOshi(); }
+            function filter(g) { document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); document.querySelectorAll('.card, .pick-card').forEach(c => c.style.display = (g === 'all' || c.dataset.group === g) ? 'flex' : 'none'); }
+            function celebrate() { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); }
             window.onload = renderOshi;
         </script>
     </body>
